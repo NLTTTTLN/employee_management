@@ -1,0 +1,92 @@
+		@font-face {
+		    font-family: 'Poppins';
+		    src: url('../fonts/FZ Poppins-Medium.ttf') format('truetype'); 
+		    font-weight: normal;
+		    font-style: normal;
+		}
+		@keyframes fadeIn {
+		    from {
+		        opacity: 0;
+		        transform: translateY(-20px); 
+		    }
+		    to {
+		        opacity: 1;
+		        transform: translateY(0); 
+		    }
+		}
+
+        body {
+            font-family: Poppins, sans-serif;
+            background: linear-gradient(135deg, #b22222, #ffcccc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+        	font-family: Poppins, sans-serif;
+        	font-weight: bold;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3 ease, box-shadow 0.3s ease;
+        }
+        
+        input[type="text"]:focus,
+		input[type="password"]:focus {
+		    border-color: #808080; 
+		    box-shadow: 0 0 5px rgba(115, 101, 101, 0.5); 
+		}
+
+        button {
+        	font-family: Poppins, sans-serif;
+        	font-weight: bold;
+            width: 100%;
+            padding: 10px;
+            background-color: #D01212;
+            border: none;
+            color: white;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #b22222;
+        }
+
+        .message {
+            color: red;
+            margin-top: 10px;
+        }
