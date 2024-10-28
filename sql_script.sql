@@ -59,4 +59,4 @@ CREATE TABLE manager_leave (
     date DATE NOT NULL,
     reason TEXT NOT NULL,
     FOREIGN KEY (leaver_id) REFERENCES manager(manager_id) ON DELETE CASCADE
-);
+);-- ádasdadasd
