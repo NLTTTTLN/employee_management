@@ -12,12 +12,8 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>spring</servlet-name>
-		<url-pattern></url-pattern>
-		</servlet-mapping>
-	<servlet-mapping>
-        <servlet-name>spring</servlet-name>
-        <url-pattern>/login</url-pattern> <!-- This maps /login to your DispatcherServlet -->
-    </servlet-mapping>
+		<url-pattern>/</url-pattern>
+		</servlet-mapping>   	
 	<!--  CharacterEncodingFilter  -->
 	<filter>
 		<filter-name>utf8</filter-name>
