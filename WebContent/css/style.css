@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.admin-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    color: #333;
+}
+
+.admin-options ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.admin-options li {
+    margin: 10px 0;
+}
+
+.admin-options a {
+    text-decoration: none;
+    color: #5cb85c;
+}
+
+.admin-options a:hover {
+    text-decoration: underline;
+}
+
+.logout {
+    margin-top: 20px;
+}
