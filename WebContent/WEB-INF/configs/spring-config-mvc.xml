@@ -27,5 +27,19 @@
    	
    	<!-- Cấu hình package chứa các controller -->
 	<context:component-scan base-package="employee_management.*"/>
+	
+		<mvc:interceptors>
+		<mvc:interceptor>
+	        <mvc:mapping path="/admin/**"/> 
+	        <mvc:mapping path="/manager/**"/>
+	        <mvc:mapping path="/employee/**"/>  
+	        <mvc:exclude-mapping path="/login"/>
+	        <mvc:exclude-mapping path="/css/**"/>
+	        <mvc:exclude-mapping path="/fonts/**"/>
+	        <mvc:exclude-mapping path="/images/**"/>
+	        <mvc:exclude-mapping path="/js/**"/>
+	        <bean class="employee_management.interceptor.LoginInterceptor" />
+    	</mvc:interceptor>
+	</mvc:interceptors>
 
 </beans>
