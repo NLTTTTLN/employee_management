@@ -38,7 +38,7 @@ public class AdminController{
 	public String redirectToHome(RedirectAttributes attributes) {
 			return "redirect:admin/dashboard";
 		}
-	 @RequestMapping(value="/dashboard-info",method = RequestMethod.GET)
+	@RequestMapping(value="/dashboard-info",method = RequestMethod.GET)
 	    @ResponseBody
 	    public Map<String, Object> getDashboardData() {
 	        // Assuming these methods exist in your AccountService
@@ -59,4 +59,21 @@ public class AdminController{
 
 	        return dashboardData; // This will be returned as JSON
 	    }
+		@RequestMapping(value="/management", method = RequestMethod.GET)
+		public String showAdminManagementPage(Model model) {
+	        model.addAttribute("managers", accountService.getAllManagers());
+	        model.addAttribute("employees", accountService.getAllEmployees());
+		return "admin/management";
+		}
+		   @RequestMapping(value="/delete",method = RequestMethod.POST)
+		    public String deleteUser(@RequestParam("username") String username) {
+		        accountService.deleteUser(username);
+		        return "redirect:/admin/management";
+		    }
+
+		   @RequestMapping(value="/promote",method = RequestMethod.POST)
+		    public String promoteToManager(@RequestParam("username") String username) {
+		        accountService.promoteToManager(username);
+		        return "redirect:/admin/management";
+		    }
 }
