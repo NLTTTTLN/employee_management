@@ -22,13 +22,11 @@ public class AccountService {
     }
     
     public int getManagerCount() {
-        // Your logic to get the count of managers from the database
-        return 10; // Placeholder
+        return accountDAO.countManagers(); 
     }
 
     public int getEmployeeCount() {
-        // Your logic to get the count of employees from the database
-        return 50; // Placeholder
+        return accountDAO.countEmployees(); 
     }
 
     public List<String> getRecentManagerActivities() {
@@ -39,5 +37,25 @@ public class AccountService {
     public List<String> getRecentEmployeeActivities() {
         // Your logic to get recent activities by employees
         return List.of("Employee 1 submitted a request", "Employee 2 updated their profile"); // Placeholder
+    }
+    
+    // Fetch all managers
+    public List<Account> getAllManagers() {
+        return accountDAO.getAllManagers();
+    }
+
+    // Fetch all employees
+    public List<Account> getAllEmployees() {
+        return accountDAO.getAllEmployees();
+    }
+
+    // Delete a user
+    public void deleteUser(String username) {
+        accountDAO.deleteUser(username);
+    }
+
+    // Promote an employee to a manager
+    public void promoteToManager(String username) {
+        accountDAO.promoteToManager(username);
     }
 }
