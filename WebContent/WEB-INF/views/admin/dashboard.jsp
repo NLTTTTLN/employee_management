@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Admin Home</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>"> <!-- Reusable CSS file -->
 </head>
 <body>
@@ -15,9 +15,11 @@
                 <h2>Quản lý nhân sự</h2>
             </div>
             <ul class="nav-links">
-			    <li><button onclick="location.href='<c:url value='/admin/dashboard' />'">Dashboard</button></li>
-			    <li><button onclick="location.href='<c:url value='/admin/manageEmployees' />'">Quản lí người dùng</button></li>
-			    <li><button onclick="location.href='<c:url value='/admin/profile' />'">Cá nhân</button></li>
+			    <li><button onclick="location.href='<c:url value='/admin/dashboard' />'">
+			    <img src="<c:url value='/images/dashboard_icon.png'/>" alt="Dashboard Icon" class="icon">Dashboard</button></li>
+			    <li><button onclick="location.href='<c:url value='/admin/management' />'">
+			    <img src="<c:url value='/images/management_icon.png'/>" alt="Management Icon" class="icon">Quản lý người dùng</button></li>
+
 			</ul>
             <div class="bottom-link">
                 <li><button onclick="location.href='<c:url value='/logout' />'">Đăng xuất</button></li>
