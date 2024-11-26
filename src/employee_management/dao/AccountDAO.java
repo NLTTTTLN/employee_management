@@ -115,6 +115,21 @@ public class AccountDAO {
         }
         return employees;
     }
+    
+    // Add a user
+    public void addUser(String username, String password, String role) {
+        String sql = "INSERT INTO account (username, password, role) VALUES (?, ?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, role);
+            stmt.executeUpdate();
+            System.out.println("Added user with username: " + username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Delete a user
     public void deleteUser(String username) {
@@ -123,6 +138,7 @@ public class AccountDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.executeUpdate();
+            System.out.println("Executing query: " + sql + " with username: " + username);
         } catch (Exception e) {
             e.printStackTrace();
         }
