@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import employee_management.bean.Account;
+import employee_management.bean.Employee;
 import employee_management.dao.ManagerDAO;
 
 @Service
@@ -23,13 +24,14 @@ public class ManagerService {
 
 
     // Fetch all employees
-    public List<Account> getAllEmployees() {
+    public List<Employee> getAllEmployees() {
         return managerDAO.getAllEmployees();
     }
     
-    public void addEmployee(String username, String password, String role) {
-    	System.out.println("ManagerService adding employee: " + username);
-        managerDAO.addEmployee(username,password,role);
+    public void addEmployee(String username, String name, String gender, java.sql.Date dob, 
+            String email, String phone_num, String address, String department, double salary) {
+    		System.out.println("ManagerService adding employee: " + username);
+    		managerDAO.addEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
     }
 
     // Delete a user
