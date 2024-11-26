@@ -30,9 +30,10 @@
 	
 		<mvc:interceptors>
 		<mvc:interceptor>
-	        <mvc:mapping path="/admin/**"/> 
+
 	        <mvc:mapping path="/manager/**"/>
-	        <mvc:mapping path="/employee/**"/>  
+	        <mvc:mapping path="/employee/**"/> 
+	        <mvc:mapping path="/admin/**"/> 
 	        <mvc:exclude-mapping path="/login"/>
 	        <mvc:exclude-mapping path="/css/**"/>
 	        <mvc:exclude-mapping path="/fonts/**"/>
