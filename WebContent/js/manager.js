@@ -43,23 +43,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fetchDashboardData();
 
-    function fetchUsers(callback) {
-        fetch('/employee_management/manager/management-data') 
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
-                }
-                return response.json();
-            })
-            .then(data => {
-                populateTable('managers', data.managerData);
-                populateTable('employees', data.employeeData);
-                callback(data);
-            })
-            .catch(error => console.error('Error fetching user data:', error));
+    function fetchEmployee(callback) {
+		fetch('/employee_management/manager/management-data') 
+		    .then(response => {
+		        if (!response.ok) {
+		            throw new Error('Failed to fetch user data');
+		        }
+		        return response.json();
+		    })
+		    .then(data => {
+		        // Only populate employee data, not manager data
+		        populateTable('employees', data.employeeData);
+		        callback(data);
+		    })
+		    .catch(error => console.error('Error fetching user data:', error));
     }
 
-    fetchUsers();
+    fetchEmployee();
 
     // Modal trigger buttons
     document.getElementById('addBtn').onclick = function () {
@@ -184,16 +184,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Populate user tables (Managers/Employees)
     function populateTable(type, users) {
-        const tableBody = document.querySelector(`.${type}-table tbody`);
-        tableBody.innerHTML = ''; // Clear existing rows
-        users.forEach(user => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${user.username}</td>
-                <td>${user.role}</td>
-            `;
-            tableBody.appendChild(row);
-        });
+		const tableBody = document.querySelector(`.manager-management-table tbody`);
+		tableBody.innerHTML = ''; // Clear existing rows
+
+		users.forEach(user => {
+		    const row = document.createElement('tr');
+		    row.innerHTML = `
+		        <td>${user.username}</td>
+		        <td>${user.name}</td>
+		        <td>${user.gender}</td>
+		        <td>${user.dob}</td>
+		        <td>${user.email}</td>
+		        <td>${user.phone_num}</td>
+		        <td>${user.address}</td>
+		        <td>${user.department}</td>
+		        <td>${user.salary}</td>
+		    `;
+		    tableBody.appendChild(row);
+		});
     }
 
     // Add User function
