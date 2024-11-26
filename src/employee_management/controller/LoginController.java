@@ -47,7 +47,13 @@ public class LoginController {
 
 	        response.put("success", true); // Authenticate thành công
 	        // Respone được server trả về tương ứng với role của account
-	        response.put("redirectUrl", "admin".equals(account.getRole()) ? "admin/dashboard" : "/user/home");
+	        if ("admin".equals(account.getRole())) {
+	            response.put("redirectUrl", "admin/dashboard");
+	        } else if ("manager".equals(account.getRole())) {
+	            response.put("redirectUrl", "manager/dashboard");
+	        } else {
+	            response.put("redirectUrl", "/user/home");
+	        }
 	    } else {
 	        response.put("success", false); // Authenticate thất bại
 	    }
