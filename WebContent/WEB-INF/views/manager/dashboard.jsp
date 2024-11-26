@@ -19,6 +19,8 @@
 			    <img src="<c:url value='/images/dashboard_icon.png'/>" alt="Dashboard Icon" class="icon">Dashboard</button></li>
 			    <li><button onclick="location.href='<c:url value='/manager/management' />'">
 			    <img src="<c:url value='/images/management_icon.png'/>" alt="Management Icon" class="icon">Quản lý người dùng</button></li>
+			    <li><button onclick="location.href='<c:url value='/manager/profile' />'">
+			    <img src="<c:url value='/images/personal_icon.png'/>" alt="Profile Icon" class="icon">Cá nhân</button></li>
 
 			</ul>
             <div class="bottom-link">
