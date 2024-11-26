@@ -48,9 +48,15 @@ public class AccountService {
     public List<Account> getAllEmployees() {
         return accountDAO.getAllEmployees();
     }
+    
+    public void addUser(String username, String password, String role) {
+    	System.out.println("AccountService adding user: " + username);
+        accountDAO.addUser(username,password,role);
+    }
 
     // Delete a user
     public void deleteUser(String username) {
+    	System.out.println("AccountService deleting user: " + username);
         accountDAO.deleteUser(username);
     }
 
