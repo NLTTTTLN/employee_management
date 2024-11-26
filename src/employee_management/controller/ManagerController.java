@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import employee_management.bean.Account;
+import employee_management.bean.Employee;
 import employee_management.service.ManagerService;
 
 import java.util.HashMap;
@@ -59,8 +60,8 @@ public class ManagerController{
 		}
 		@RequestMapping(value="/management-data", method = RequestMethod.GET)
 		@ResponseBody
-		public Map<String, Object> getUserData(Model model) {
-			 List<Account> employeeData = managerService.getAllEmployees();
+		public Map<String, Object> getEmployeeData(Model model) {
+			 List<Employee> employeeData = managerService.getAllEmployees();
 			 System.out.println("Employees: " + employeeData);
 			 
 			 Map<String, Object> employeeFullData = new HashMap<>();
@@ -70,10 +71,16 @@ public class ManagerController{
 		@RequestMapping(value = "/add", method = RequestMethod.POST)
 		public String addEmployee(
 		    @RequestParam("username") String username, 
-		    @RequestParam("password") String password, 
-		    @RequestParam("role") String role) {
+		    @RequestParam("name") String name, 
+		    @RequestParam("gender") String gender,
+		    @RequestParam("dob") java.sql.Date dob, 
+		    @RequestParam("email") String email, 
+		    @RequestParam("phone_num") String phone_num,
+		    @RequestParam("address") String address, 
+		    @RequestParam("department") String department, 
+		    @RequestParam("salary") Double salary) {
 		    
-		    managerService.addEmployee(username, password, role);
+		    managerService.addEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
 		    System.out.println("Adding employee: " + username);
 		    return "redirect:/manager/management";
 		}
