@@ -36,19 +36,20 @@
                     <!-- Move the buttons inside the management div -->
                     <div class="button-container">
                         <!-- Buttons for Delete/Promote -->
-                        <button class="action-btn" id="deleteBtn">Delete</button>
-                        <button class="action-btn" id="promoteBtn">Promote</button>
+                        <button class="action-btn" id="addBtn">Thêm</button>
+                        <button class="action-btn" id="deleteBtn">Xóa</button>
+                        <button class="action-btn" id="promoteBtn">Thay đổi chức vụ</button>
                     </div>
 
                     <div class="table-container">
                         <div class="table-box">
-                            <h3>Managers</h3>
+                            <h3>Danh sách quản lý</h3>
                             <div class="scrollable-table">
-                                <table border="1">
+                                <table class="managers-table" border="1">
                                     <thead>
                                     <tr>
-                                        <th>Username</th>
-                                        <th>Role</th>
+                                        <th>Tên tài khoản</th>
+                                        <th>Chức vụ</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -64,13 +65,13 @@
                         </div>
 
                         <div class="table-box">
-                            <h3>Employees</h3>
+                            <h3>Danh sách nhân viên</h3>
                             <div class="scrollable-table">
-                                <table border="1">
+                                <table class="employees-table" border="1">
                                     <thead>
                                     <tr>
-                                        <th>Username</th>
-                                        <th>Role</th>
+                                        <th>Tên tài khoản</th>
+                                        <th>Chức vụ</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -85,17 +86,44 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Add Modal -->
+                    <div id="addModal" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <span class="close-btn" id="closeAddBtn">&times;</span>
+                            <h3>Thêm người dùng mới</h3>
+
+                            <form id="addUserForm">
+                                <label for="username">Tên tài khoản:</label>
+                                <input type="text" id="username" name="username" placeholder="Tên tài khoản" required>
+                                <br>
+
+                                <label for="password">Mật khẩu:</label>
+                                <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+                                <br>
+
+                                <label for="role">Vai trò:</label>
+                                <select id="role" name="role">
+                                    <option value="employee">Nhân viên</option>
+                                    <option value="manager">Quản lý</option>
+                                </select>
+                                <br>
+
+                                <button type="button" id="confirmAddBtn">Thêm người dùng</button>
+                            </form>
+                        </div>
+                    </div>
 
                     <!-- Modal for Delete or Promote Action -->
-                    <div id="actionModal" class="modal">
+                    <div id="actionModal" class="modal" style="display: none;">
                         <div class="modal-content">
                             <span class="close-btn" id="closeBtn">&times;</span>
-                            <h3>Choose a user</h3>
-                            <select id="userSelect">
+                            <h3></h3>
+                            <select id="userSelect" style="display: none;">
                                 <!-- Dynamic options will be inserted here -->
                             </select>
                             <br>
-                            <button id="confirmActionBtn">Confirm</button>
+                            <button id="confirmActionBtn"></button>
                         </div>
                     </div>
                 </div>
