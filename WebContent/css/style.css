@@ -125,7 +125,6 @@ body {
 
 /* Main content styling */
 .content {
-	
 	font-family: Poppins, sans-serif;
     flex-grow: 1;
     background-color: #f4f4f4;
@@ -141,6 +140,11 @@ body {
     padding: 5px 10px;
     border-radius: 4px;
     margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #b71c1c; /* Darker red on hover */
 }
 
 .dashboard {
@@ -201,19 +205,19 @@ body {
     margin-right: 0; /* Remove margin for the last section */
 }
 
- table {
+ .dashboard table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+.dashboard th,td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
             font-family: Poppins, sans-serif;
 
         }
-        th {
+.dashboard th {
             padding: 10px;
    			text-align: left;
     		border: 1px solid #ddd;
@@ -262,7 +266,6 @@ body {
 .management .scrollable-table {
     max-height: 300px; /* Set the maximum height for scroll */
     overflow-y: auto; /* Enable vertical scrollbar */
-    margin-top: 10px;
     
     
 }
@@ -275,44 +278,46 @@ body {
     margin-bottom: 10px;
 }
 
-.management table thead, table td {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-    position: relative;
+.management table th{
+            padding: 10px;
+            font-family: Poppins, sans-serif;
 }
-.management table th {
-    background-color: #f4f4f4;
+.management table thead tr {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	color: white;
+    background-color:  #d32f2f;
     font-weight: 600;
     position: sticky;
-    top: 0; /* Stick to the top when scrolling */
-    z-index: 2; /* Ensure the header stays above the table content */ /* Optional: to make it look cleaner when sticky */
+    top: -0.1; /* Stick to the top when scrolling */
+    z-index: 1; /* Ensure the header stays above the table content */ /* Optional: to make it look cleaner when sticky */
 }
 
-.management button {
-	font-family: Poppins, sans-serif;
-    padding: 5px 10px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    cursor: pointer;
+.management table tbody tr {
+	
+	border-bottom: 1px solid #ddd;
+}
+.management table tbody td {
+	
+	border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+
 }
 
-.management button:hover {
-    background-color: #2980b9;
-}
 
 /* Container for action buttons (Delete and Promote) */
 .management .button-container {
     position: relative; /* Changed from absolute to relative */
     top: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 0;
     margin-top: 10px; /* Adds some space from the top of the container */
     text-align: right; /* Align the button to the right */
 }
 
 .management .action-btn {
+	font-family: Poppins, sans-serif;
     padding: 10px 20px;
     margin: 5px;
     margin-bottom: 10px;
@@ -345,45 +350,72 @@ body {
 }
 
 .management .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    background-color: #ffffff;
+    margin: 10% auto;
     padding: 20px;
-    border: 1px solid #888;
-    border-radius: 4px;
-    width: 40%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 50%; /* Adjust width as needed */
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: Poppins, sans-serif;
 }
 
+/* Close Button */
 .management .close-btn {
-    color: #aaa;
+    color: #d32f2f;
     float: right;
-    font-size: 28px;
-    font-weight: bold;    
-    transition: all 0.3s ease;
-}
-
-.management .close-btn:hover,
-.management .close-btn:focus {
-    color: black;
-    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-.management select {
+.management .close-btn:hover {
+    color: #b71c1c;
+}
+
+/* Input Fields */
+.management .modal-content label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    text-align: left;
+}
+
+.management .modal-content input,
+.management .modal-content select {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
-.management #confirmActionBtn {
-    padding: 10px 20px;
+/* Buttons */
+.management .modal-content button {
     background-color: #d32f2f;
     color: white;
+    padding: 10px 15px;
     border: none;
-    cursor: pointer;
     border-radius: 4px;
-   	transition: all 0.3s ease;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-.management #confirmActionBtn:hover {
+.management .modal-content button:hover {
     background-color: #b71c1c;
 }
+
+/* Align items properly */
+.management .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
