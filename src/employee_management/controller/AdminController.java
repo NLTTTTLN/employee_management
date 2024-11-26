@@ -61,13 +61,36 @@ public class AdminController{
 	    }
 		@RequestMapping(value="/management", method = RequestMethod.GET)
 		public String showAdminManagementPage(Model model) {
-	        model.addAttribute("managers", accountService.getAllManagers());
-	        model.addAttribute("employees", accountService.getAllEmployees());
+
 		return "admin/management";
+		}
+		@RequestMapping(value="/management-data", method = RequestMethod.GET)
+		@ResponseBody
+		public Map<String, Object> getUserData(Model model) {
+			 List<Account> managerData = accountService.getAllManagers();
+			 List<Account> employeeData = accountService.getAllEmployees();
+			 System.out.println("Managers: " + managerData);
+			 System.out.println("Employees: " + employeeData);
+			 
+			 Map<String, Object> userData = new HashMap<>();
+			 userData.put("managerData", managerData);
+		     userData.put("employeeData", employeeData);
+		return userData;
+		}
+		@RequestMapping(value = "/add", method = RequestMethod.POST)
+		public String addUser(
+		    @RequestParam("username") String username, 
+		    @RequestParam("password") String password, 
+		    @RequestParam("role") String role) {
+		    
+		    accountService.addUser(username, password, role);
+		    System.out.println("Adding user: " + username);
+		    return "redirect:/admin/management";
 		}
 		   @RequestMapping(value="/delete",method = RequestMethod.POST)
 		    public String deleteUser(@RequestParam("username") String username) {
 		        accountService.deleteUser(username);
+		        System.out.println("Deleting user: " + username);
 		        return "redirect:/admin/management";
 		    }
 
