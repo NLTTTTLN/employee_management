@@ -36,4 +36,11 @@ public class Account {
     public void setRole(String role) {
         this.role = role;
     }
+    @Override
+    public String toString() {
+        return "Account{" +
+               "username='" + username + '\'' +
+               ", role='" + role + '\'' +
+               '}';
+    }
 }
