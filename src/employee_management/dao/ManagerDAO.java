@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import employee_management.bean.Account;
+import employee_management.bean.Employee;
 
 @Repository
 public class ManagerDAO {
@@ -71,14 +72,23 @@ public class ManagerDAO {
     }
     
     // Fetch all employees
-    public List<Account> getAllEmployees() {
-        String sql = "SELECT * FROM account WHERE role = 'employee'";
-        List<Account> employees = new ArrayList<>();
+    public List<Employee> getAllEmployees() {
+        String sql = "SELECT * FROM employee";
+        List<Employee> employees = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                employees.add(new Account(rs.getString("username"), rs.getString("password"), rs.getString("role")));
+                employees.add(new Employee(
+                		rs.getString("username"), 
+                		rs.getString("name"), 
+                		rs.getString("gender"),
+                		rs.getDate("dob"), 
+                		rs.getString("email"), 
+                		rs.getString("phone_num"),
+                		rs.getString("address"), 
+                		rs.getString("department"), 
+                		rs.getDouble("salary")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,13 +97,19 @@ public class ManagerDAO {
     }
     
     // Add a user
-    public void addEmployee(String username, String password, String role) {
+    public void addEmployee(String username, String name, String gender, java.sql.Date dob, String email, String phone_num, String address, String department, double salary) {
         String sql = "INSERT INTO account (username, password, role) VALUES (?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            stmt.setString(2, password);
-            stmt.setString(3, role);
+            stmt.setString(2, name);
+            stmt.setString(3, gender);
+            stmt.setDate(4, dob);
+            stmt.setString(5, email);
+            stmt.setString(6, phone_num);
+            stmt.setString(7, address);
+            stmt.setString(8, department);
+            stmt.setDouble(9, salary);
             stmt.executeUpdate();
             System.out.println("Added user with username: " + username);
         } catch (Exception e) {
