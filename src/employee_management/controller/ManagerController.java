@@ -70,6 +70,32 @@ public class ManagerController{
 		}
 		@RequestMapping(value = "/add", method = RequestMethod.POST)
 		public String addEmployee(
+			    @RequestParam("username") String username, 
+			    @RequestParam("name") String name, 
+			    @RequestParam("gender") String gender,
+			    @RequestParam("dob") java.sql.Date dob, 
+			    @RequestParam("email") String email, 
+			    @RequestParam("phone_num") String phone_num,
+			    @RequestParam("address") String address, 
+			    @RequestParam("department") String department, 
+			    @RequestParam("salary") Double salary) {
+			    
+			    // Set password to be the same as the username
+			    String password = username;
+			    
+			    managerService.addEmployee(username, password, name, gender, dob, email, phone_num, address, department, salary);
+			    System.out.println("Adding employee: " + username);
+			    return "redirect:/manager/management";
+		}
+		@RequestMapping(value="/delete",method = RequestMethod.POST)
+		public String deleteEmployee(@RequestParam("username") String username) {
+		    managerService.deleteEmployee(username);
+		    System.out.println("Deleting employee: " + username);
+		    return "redirect:/manager/management";
+		}
+
+		@RequestMapping(value = "/update", method = RequestMethod.POST)
+		public String updateEmployee(
 		    @RequestParam("username") String username, 
 		    @RequestParam("name") String name, 
 		    @RequestParam("gender") String gender,
@@ -79,17 +105,12 @@ public class ManagerController{
 		    @RequestParam("address") String address, 
 		    @RequestParam("department") String department, 
 		    @RequestParam("salary") Double salary) {
-		    
-		    managerService.addEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
-		    System.out.println("Adding employee: " + username);
+
+		    managerService.updateEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
+		    System.out.println("Updating employee: " + username);
 		    return "redirect:/manager/management";
 		}
-		   @RequestMapping(value="/delete",method = RequestMethod.POST)
-		    public String deleteEmployee(@RequestParam("username") String username) {
-		        managerService.deleteEmployee(username);
-		        System.out.println("Deleting employee: " + username);
-		        return "redirect:/manager/management";
-		    }
+
 
 
 }

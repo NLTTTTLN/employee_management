@@ -15,13 +15,13 @@ import employee_management.bean.Employee;
 
 @Repository
 public class ManagerDAO {
-    private static final String URL = "jdbc:mysql://localhost:3306/employee_management"; // Nhập tên Schema database
-    private static final String USER = "root"; // Nhập tên user truy cập database
-    private static final String PASSWORD = "Thang0366"; // Nhập mật khẩu truy cập database
+    private static final String URL = "jdbc:mysql://localhost:3306/employee_management"; // Schema database
+    private static final String USER = "root"; // User for database access
+    private static final String PASSWORD = "Thang0366"; // Password for database access
 
     public ManagerDAO() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -34,19 +34,16 @@ public class ManagerDAO {
 
     // Authenticate 
     public Account authenticate(String username, String password) {
-        Account account = null; // Khởi tạo Object Account trống
+        Account account = null;
         String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username); // Gán username cần authenticate vào truy vấn
-            stmt.setString(2, password); // Gán password cần authenticate vào truy vấn
-            System.out.println("Executing query: " + sql + " with username: " + username);
-            try (ResultSet rs = stmt.executeQuery()) { // Tạo biến rs chứa kết quả sau khi truy vấn
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    // Nếu có Row trùng với truy vấn, hàm if trả về true, tiến hành gán thông tin của user tương ứng vào Object account
                     account = new Account(rs.getString("username"), rs.getString("password"), rs.getString("role"));
                 } else {
-                    // Nếu không có Row trùng với truy vấn, hàm if trả về false, authenticate thất bại
                     System.out.println("Authentication failed for username: " + username);
                 }
             }
@@ -80,15 +77,15 @@ public class ManagerDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 employees.add(new Employee(
-                		rs.getString("username"), 
-                		rs.getString("name"), 
-                		rs.getString("gender"),
-                		rs.getDate("dob"), 
-                		rs.getString("email"), 
-                		rs.getString("phone_num"),
-                		rs.getString("address"), 
-                		rs.getString("department"), 
-                		rs.getDouble("salary")));
+                        rs.getString("username"), 
+                        rs.getString("name"), 
+                        rs.getString("gender"),
+                        rs.getDate("dob"), 
+                        rs.getString("email"), 
+                        rs.getString("phone_num"),
+                        rs.getString("address"), 
+                        rs.getString("department"), 
+                        rs.getDouble("salary")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,37 +94,81 @@ public class ManagerDAO {
     }
     
     // Add a user
-    public void addEmployee(String username, String name, String gender, java.sql.Date dob, String email, String phone_num, String address, String department, double salary) {
-        String sql = "INSERT INTO account (username, password, role) VALUES (?, ?, ?)";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            stmt.setString(2, name);
-            stmt.setString(3, gender);
-            stmt.setDate(4, dob);
-            stmt.setString(5, email);
-            stmt.setString(6, phone_num);
-            stmt.setString(7, address);
-            stmt.setString(8, department);
-            stmt.setDouble(9, salary);
-            stmt.executeUpdate();
-            System.out.println("Added user with username: " + username);
-        } catch (Exception e) {
+    public void addEmployee(String username, String password, String name, String gender, java.sql.Date dob, String email, String phone_num, String address, String department, double salary) {
+        String accountSql = "INSERT INTO account (username, password, role) VALUES (?, ?, 'employee')";
+        String employeeSql = "INSERT INTO employee (username, name, gender, dob, email, phone_num, address, department, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = getConnection()) {
+            // Start a transaction
+            conn.setAutoCommit(false);
+            
+            // Insert into account table
+            try (PreparedStatement stmt = conn.prepareStatement(accountSql)) {
+                stmt.setString(1, username);
+                stmt.setString(2, password); // Password should be passed to this method
+                stmt.executeUpdate();
+            }
+
+            // Insert into employee table
+            try (PreparedStatement stmt = conn.prepareStatement(employeeSql)) {
+                stmt.setString(1, username);
+                stmt.setString(2, name);
+                stmt.setString(3, gender);
+                stmt.setDate(4, dob);
+                stmt.setString(5, email);
+                stmt.setString(6, phone_num);
+                stmt.setString(7, address);
+                stmt.setString(8, department);
+                stmt.setDouble(9, salary);
+                stmt.executeUpdate();
+            }
+
+            // Commit transaction
+            conn.commit();
+            System.out.println("Added employee and account for username: " + username);
+        } catch (SQLException e) {
+            // Rollback transaction on error
+            try (Connection conn = getConnection()) {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
 
     // Delete a user
     public void deleteEmployee(String username) {
-        String sql = "DELETE FROM account WHERE username = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            stmt.executeUpdate();
-            System.out.println("Executing query: " + sql + " with username: " + username);
-        } catch (Exception e) {
+        String deleteEmployeeSql = "DELETE FROM employee WHERE username = ?";
+        String deleteAccountSql = "DELETE FROM account WHERE username = ?";
+        
+        try (Connection conn = getConnection()) {
+            // Start a transaction
+            conn.setAutoCommit(false);
+            
+            // Delete from employee table
+            try (PreparedStatement stmt = conn.prepareStatement(deleteEmployeeSql)) {
+                stmt.setString(1, username);
+                stmt.executeUpdate();
+            }
+
+            // Delete from account table
+            try (PreparedStatement stmt = conn.prepareStatement(deleteAccountSql)) {
+                stmt.setString(1, username);
+                stmt.executeUpdate();
+            }
+
+            // Commit transaction
+            conn.commit();
+            System.out.println("Deleted employee and account for username: " + username);
+        } catch (SQLException e) {
+            // Rollback transaction on error
+            try (Connection conn = getConnection()) {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
-
 }

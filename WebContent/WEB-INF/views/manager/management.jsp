@@ -86,21 +86,45 @@
                         <div class="modal-content">
                             <span class="close-btn" id="closeAddBtn">&times;</span>
                             <h3>Thêm nhân viên mới</h3>
-
                             <form id="addUserForm">
                                 <label for="username">Tên tài khoản:</label>
                                 <input type="text" id="username" name="username" placeholder="Tên tài khoản" required>
                                 <br>
 
-                                <label for="password">Mật khẩu:</label>
-                                <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+                                <label for="name">Tên đầy đủ:</label>
+                                <input type="text" id="name" name="name" placeholder="Tên đầy đủ" required>
                                 <br>
 
-                                <label for="role">Vai trò:</label>
-                                <select id="role" name="role">
-                                    <option value="employee">Nhân viên</option>
-                                    <option value="manager">Quản lý</option>
+                                <label for="gender">Giới tính:</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="male">Nam</option>
+                                    <option value="female">Nữ</option>
+                                    <option value="other">Khác</option>
                                 </select>
+                                <br>
+
+                                <label for="dob">Ngày sinh:</label>
+                                <input type="date" id="dob" name="dob" required>
+                                <br>
+
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" placeholder="Email" required>
+                                <br>
+
+                                <label for="phone_num">Số điện thoại:</label>
+                                <input type="text" id="phone_num" name="phone_num" placeholder="Số điện thoại" required>
+                                <br>
+
+                                <label for="address">Địa chỉ:</label>
+                                <input type="text" id="address" name="address" placeholder="Địa chỉ" required>
+                                <br>
+
+                                <label for="department">Phòng ban:</label>
+                                <input type="text" id="department" name="department" placeholder="Phòng ban" required>
+                                <br>
+
+                                <label for="salary">Lương:</label>
+                                <input type="number" id="salary" name="salary" placeholder="Lương" required>
                                 <br>
 
                                 <button type="button" id="confirmAddBtn">Thêm nhân viên</button>

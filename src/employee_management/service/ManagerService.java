@@ -28,10 +28,10 @@ public class ManagerService {
         return managerDAO.getAllEmployees();
     }
     
-    public void addEmployee(String username, String name, String gender, java.sql.Date dob, 
+    public void addEmployee(String username, String password, String name, String gender, java.sql.Date dob, 
             String email, String phone_num, String address, String department, double salary) {
     		System.out.println("ManagerService adding employee: " + username);
-    		managerDAO.addEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
+    		managerDAO.addEmployee(username,password, name, gender, dob, email, phone_num, address, department, salary);
     }
 
     // Delete a user
