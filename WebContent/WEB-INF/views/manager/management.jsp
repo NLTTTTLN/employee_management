@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -40,7 +41,7 @@
                         <!-- Buttons for Delete/Promote -->
                         <button class="action-btn" id="addBtn">Thêm</button>
                         <button class="action-btn" id="deleteBtn">Xóa</button>
-                        <button class="action-btn" id="promoteBtn">Thay đổi chức vụ</button>
+                        <button class="action-btn" id="editBtn">Sửa</button>
                     </div>
 
                     <div class="table-container">
@@ -132,18 +133,110 @@
                         </div>
                     </div>
 
-                    <!-- Modal for Delete or Promote Action -->
-                    <div id="actionModal" class="modal" style="display: none;">
+                    <!-- Delete Modal -->
+                    <div id="deleteModal" class="modal" style="display: none;">
                         <div class="modal-content">
-                            <span class="close-btn" id="closeBtn">&times;</span>
-                            <h3></h3>
-                            <select id="userSelect" style="display: none;">
-                                <!-- Dynamic options will be inserted here -->
+                            <span class="close-btn" id="closeDeleteBtn">&times;</span>
+                            <h3>Xóa nhân viên</h3>
+                            
+                            <!-- Search Bar for Employees -->
+                            <label for="searchEmployee">Tìm kiếm nhân viên:</label>
+                            <input type="text" id="searchEmployee" placeholder="Nhập tên tài khoản" oninput="searchEmployee()">
+                            <br><br>
+                    
+                            <!-- Employee List Dropdown -->
+                            <select id="employeeList" name="employeeList" size="5" style="width: 100%;">
+                                <option value="">Chọn nhân viên</option>
                             </select>
                             <br>
-                            <button id="confirmActionBtn"></button>
+                    
+                            <form id="deleteUserForm">
+                                <label for="deleteUsername">Nhân viên được chọn:</label>
+                                <input type="text" id="deleteUsername" name="deleteUsername" placeholder="Tên tài khoản" readonly>
+                                <br>
+                                <button type="button" id="confirmDeleteBtn">Xóa</button>
+                            </form>
                         </div>
                     </div>
+
+                    <!-- Edit select Modal -->
+                    <div id="editSelectModal" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <span class="close-btn" id="closeEditSelectBtn">&times;</span>
+                            <h3>Chọn nhân viên chỉnh sửa</h3>
+                            
+                            <!-- Search Bar for Employees -->
+                            <label for="searchEditEmployee">Tìm kiếm nhân viên:</label>
+                            <input type="text" id="searchEditEmployee" placeholder="Nhập tên tài khoản" oninput="searchEditEmployee()">
+                            <br><br>
+                    
+                            <!-- Employee List Dropdown -->
+                            <select id="employeeListEdit" name="employeeListEdit" size="5" style="width: 100%;" onchange="selectEditEmployee()">
+                                <option value="">Chọn nhân viên</option>
+                            </select>
+                            <br>
+                    
+                            <form id="editUserForm">
+                                <label for="selectEditUsername">Nhân viên được chọn:</label>
+                                <input type="text" id="selectEditUsername" name="selectEditUsername" placeholder="Tên tài khoản" readonly>
+                                <br>
+                                <button type="button" id="confirmSelectBtn">Sửa</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Edit Modal (same modal as Add, but with pre-filled data for editing) -->
+                    <div id="editModal" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <span class="close-btn" id="closeEditBtn">&times;</span>
+                            <h3>Sửa thông tin nhân viên</h3>
+                            <form id="editUserForm">
+                                <label for="editUsername">Tên tài khoản:</label>
+                                <input type="text" id="editUsername" name="username" placeholder="Tên tài khoản" readonly>
+                                <br>
+                    
+                                <label for="editName">Tên đầy đủ:</label>
+                                <input type="text" id="editName" name="name" placeholder="Tên đầy đủ" required>
+                                <br>
+                    
+                                <label for="editGender">Giới tính:</label>
+                                <select id="editGender" name="gender" required>
+                                    <option value="male">Nam</option>
+                                    <option value="female">Nữ</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                                <br>
+                    
+                                <label for="editDob">Ngày sinh:</label>
+                                <input type="date" id="editDob" name="dob" required>
+                                <br>
+                    
+                                <label for="editEmail">Email:</label>
+                                <input type="email" id="editEmail" name="email" placeholder="Email" required>
+                                <br>
+                    
+                                <label for="editPhone_num">Số điện thoại:</label>
+                                <input type="text" id="editPhone_num" name="phone_num" placeholder="Số điện thoại" required>
+                                <br>
+                    
+                                <label for="editAddress">Địa chỉ:</label>
+                                <input type="text" id="editAddress" name="address" placeholder="Địa chỉ" required>
+                                <br>
+                    
+                                <label for="editDepartment">Phòng ban:</label>
+                                <input type="text" id="editDepartment" name="department" placeholder="Phòng ban" required>
+                                <br>
+                    
+                                <label for="editSalary">Lương:</label>
+                                <input type="number" id="editSalary" name="salary" placeholder="Lương" required>
+                                <br>
+                    
+                                <button type="button" id="confirmEditBtn">Cập nhật thông tin</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
             </div>
         </div>
