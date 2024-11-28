@@ -24,93 +24,103 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/manager")
-public class ManagerController{
-	
+public class ManagerController {
+
 	@Autowired
-    private ManagerService managerService;
-	
+	private ManagerService managerService;
+
 	// GET /home cho trang chính của admin
-	@RequestMapping(value="/dashboard", method = RequestMethod.GET)
-		public String showManagerHomePage() {
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	public String showManagerHomePage() {
 		return "manager/dashboard";
 	}
+
 	// Redirect /admin về trang chính của admin
 	@RequestMapping("/")
 	public String redirectToHome(RedirectAttributes attributes) {
-			return "redirect:manager/dashboard";
-		}
-	@RequestMapping(value="/dashboard-info",method = RequestMethod.GET)
-	    @ResponseBody
-	    public Map<String, Object> getDashboardData() {
-	        // Assuming these methods exist in your AccountService
-	        int employeeCount = managerService.getEmployeeCount(); // Get employee count
+		return "redirect:manager/dashboard";
+	}
 
-	        // Prepare response data
-	        Map<String, Object> dashboardData = new HashMap<>();
-	        dashboardData.put("employeeCount", employeeCount);
-	        
-	        System.out.println("Employee Count: " + employeeCount);
+	@RequestMapping(value = "/dashboard-info", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getDashboardData() {
+		// Assuming these methods exist in your AccountService
+		int employeeCount = managerService.getEmployeeCount(); // Get employee count
 
-	        return dashboardData; // This will be returned as JSON
-	    }
-		@RequestMapping(value="/management", method = RequestMethod.GET)
-		public String showManagerManagementPage(Model model) {
+		// Prepare response data
+		Map<String, Object> dashboardData = new HashMap<>();
+		dashboardData.put("employeeCount", employeeCount);
+
+		System.out.println("Employee Count: " + employeeCount);
+
+		return dashboardData; // This will be returned as JSON
+	}
+
+	@RequestMapping(value = "/management", method = RequestMethod.GET)
+	public String showManagerManagementPage(Model model) {
 
 		return "manager/management";
-		}
-		@RequestMapping(value="/management-data", method = RequestMethod.GET)
-		@ResponseBody
-		public Map<String, Object> getEmployeeData(Model model) {
-			 List<Employee> employeeData = managerService.getAllEmployees();
-			 System.out.println("Employees: " + employeeData);
-			 
-			 Map<String, Object> employeeFullData = new HashMap<>();
-		     employeeFullData.put("employeeData", employeeData);
+	}
+
+	@RequestMapping(value = "/management-data", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getEmployeeData(Model model) {
+		List<Employee> employeeData = managerService.getAllEmployees();
+		System.out.println("Employees: " + employeeData);
+
+		Map<String, Object> employeeFullData = new HashMap<>();
+		employeeFullData.put("employeeData", employeeData);
 		return employeeFullData;
-		}
-		@RequestMapping(value = "/add", method = RequestMethod.POST)
-		public String addEmployee(
-			    @RequestParam("username") String username, 
-			    @RequestParam("name") String name, 
-			    @RequestParam("gender") String gender,
-			    @RequestParam("dob") java.sql.Date dob, 
-			    @RequestParam("email") String email, 
-			    @RequestParam("phone_num") String phone_num,
-			    @RequestParam("address") String address, 
-			    @RequestParam("department") String department, 
-			    @RequestParam("salary") Double salary) {
-			    
-			    // Set password to be the same as the username
-			    String password = username;
-			    
-			    managerService.addEmployee(username, password, name, gender, dob, email, phone_num, address, department, salary);
-			    System.out.println("Adding employee: " + username);
-			    return "redirect:/manager/management";
-		}
-		@RequestMapping(value="/delete",method = RequestMethod.POST)
-		public String deleteEmployee(@RequestParam("username") String username) {
-		    managerService.deleteEmployee(username);
-		    System.out.println("Deleting employee: " + username);
-		    return "redirect:/manager/management";
-		}
+	}
 
-		@RequestMapping(value = "/update", method = RequestMethod.POST)
-		public String updateEmployee(
-		    @RequestParam("username") String username, 
-		    @RequestParam("name") String name, 
-		    @RequestParam("gender") String gender,
-		    @RequestParam("dob") java.sql.Date dob, 
-		    @RequestParam("email") String email, 
-		    @RequestParam("phone_num") String phone_num,
-		    @RequestParam("address") String address, 
-		    @RequestParam("department") String department, 
-		    @RequestParam("salary") Double salary) {
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addEmployee(@RequestParam("username") String username, @RequestParam("name") String name,
+			@RequestParam("gender") String gender, @RequestParam("dob") java.sql.Date dob,
+			@RequestParam("email") String email, @RequestParam("phone_num") String phone_num,
+			@RequestParam("address") String address, @RequestParam("department") String department,
+			@RequestParam("salary") Double salary) {
 
-		    managerService.updateEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
-		    System.out.println("Updating employee: " + username);
-		    return "redirect:/manager/management";
-		}
+		// Set password to be the same as the username
+		String password = username;
 
+		managerService.addEmployee(username, password, name, gender, dob, email, phone_num, address, department,
+				salary);
+		System.out.println("Adding employee: " + username);
+		return "redirect:/manager/management";
+	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public String deleteEmployee(@RequestParam("username") String username) {
+		managerService.deleteEmployee(username);
+		System.out.println("Deleting employee: " + username);
+		return "redirect:/manager/management";
+	}
+
+	/*
+	 * @RequestMapping(value = "/update", method = RequestMethod.POST) public String
+	 * updateEmployee(
+	 * 
+	 * @RequestParam("username") String username,
+	 * 
+	 * @RequestParam("name") String name,
+	 * 
+	 * @RequestParam("gender") String gender,
+	 * 
+	 * @RequestParam("dob") java.sql.Date dob,
+	 * 
+	 * @RequestParam("email") String email,
+	 * 
+	 * @RequestParam("phone_num") String phone_num,
+	 * 
+	 * @RequestParam("address") String address,
+	 * 
+	 * @RequestParam("department") String department,
+	 * 
+	 * @RequestParam("salary") Double salary) {
+	 * 
+	 * managerService.updateEmployee(username, name, gender, dob, email, phone_num,
+	 * address, department, salary); System.out.println("Updating employee: " +
+	 * username); return "redirect:/manager/management"; }
+	 */
 
 }
