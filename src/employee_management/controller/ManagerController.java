@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import employee_management.bean.Account;
 import employee_management.bean.Employee;
+import employee_management.bean.EmployeeSubmitItem;
 import employee_management.service.ManagerService;
 
 import java.util.HashMap;
@@ -46,13 +47,15 @@ public class ManagerController {
 	public Map<String, Object> getDashboardData() {
 		// Assuming these methods exist in your AccountService
 		int employeeCount = managerService.getEmployeeCount(); // Get employee count
-
+		List<EmployeeSubmitItem> reportsAndRequests = managerService.getReportsAndRequests();
+		
 		// Prepare response data
 		Map<String, Object> dashboardData = new HashMap<>();
 		dashboardData.put("employeeCount", employeeCount);
-
+		dashboardData.put("reportsAndRequests", reportsAndRequests);
 		System.out.println("Employee Count: " + employeeCount);
-
+		System.out.println("Employee's reports and requets : " + reportsAndRequests);
+		
 		return dashboardData; // This will be returned as JSON
 	}
 
@@ -95,6 +98,43 @@ public class ManagerController {
 		System.out.println("Deleting employee: " + username);
 		return "redirect:/manager/management";
 	}
+	
+	@RequestMapping(value = "/get-employee", method = RequestMethod.GET)
+	@ResponseBody
+	public Employee getEmployeeByUsername(@RequestParam("username") String username) {
+	    // Fetch the employee from the service layer using the ID
+		 System.out.println("Fetching employee with username: " + username);
+		    Employee employee = managerService.getEmployeeByUsername(username);
+		    System.out.println("Found employee: " + employee);
+	    return employee; // Return the employee as JSON
+	}
+	
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String editEmployee(@RequestParam String username,
+                               @RequestParam String name,
+                               @RequestParam String gender,
+                               @RequestParam String dob,
+                               @RequestParam String email,
+                               @RequestParam String phone_num,
+                               @RequestParam String address,
+                               @RequestParam String department,
+                               @RequestParam double salary) {
+        try {
+            // Pass the data to the service layer for processing
+            boolean success = managerService.editEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
+
+            if (success) {
+                System.out.println( username + "update successfully.");
+            } else {
+            	System.out.println( username + "update failed.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println( "Error while updating employee: " + e.getMessage());
+        }
+        return "manager/management";
+    }
+
 
 	/*
 	 * @RequestMapping(value = "/update", method = RequestMethod.POST) public String
