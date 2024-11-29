@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import employee_management.bean.Account;
 import employee_management.bean.Employee;
+import employee_management.bean.EmployeeSubmitItem;
 import employee_management.dao.ManagerDAO;
 
 @Service
@@ -21,7 +22,16 @@ public class ManagerService {
     public int getEmployeeCount() {
         return managerDAO.countEmployees(); 
     }
-
+    
+    //Get employee's reports and requets
+    public List<EmployeeSubmitItem> getReportsAndRequests() {
+        try {
+            return managerDAO.getReportsAndRequests();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     // Fetch all employees
     public List<Employee> getAllEmployees() {
@@ -39,5 +49,20 @@ public class ManagerService {
     	System.out.println("ManagerService deleting employee: " + username);
         managerDAO.deleteEmployee(username);
     }
+    
+    public Employee getEmployeeByUsername(String username) {
+        return managerDAO.getEmployeeByUsername(username); // Call the DAO to fetch the employee by ID
+    }public boolean editEmployee(String username, String name, String gender, String dob, String email, String phone_num, String address, String department, double salary) {
+        try {
+            java.sql.Date dateOfBirth = java.sql.Date.valueOf(dob);
+
+            // Ensure we don't modify the username, just the other fields
+            return managerDAO.updateEmployee(username, name, gender, dateOfBirth, email, phone_num, address, department, salary);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }
