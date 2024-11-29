@@ -64,7 +64,7 @@ CREATE TABLE manager_leave (
 -- Step 1: Insert into the account table
 ALTER TABLE account MODIFY COLUMN role ENUM ('admin', 'manager', 'employee') NOT NULL;
 
-INSERT INTO account (username, passwordemployee, role)
+INSERT INTO account (username, password, role)
 VALUES ('admin', 'admin', 'admin');
 
 -- Step 2: Insert into the admin table
@@ -132,6 +132,29 @@ INSERT INTO employee (username, name, gender, dob, email, phone_num, address, de
 ('employee18', 'Ella Robinson', 'Female', '1993-08-25', 'ella.robinson@example.com', '9090909090', '1818 Star St', 'Finance', 56000.00),
 ('employee19', 'James Martin', 'Male', '1995-11-20', 'james.martin@example.com', '1010101010', '1919 Cloud St', 'Sales', 47000.00),
 ('employee20', 'Charlotte Walker', 'Female', '1993-12-05', 'charlotte.walker@example.com', '1111111111', '2020 Sky St', 'Marketing', 59000.00);
-
+-- Add department colum for manager role
+ALTER TABLE Manager
+ADD COLUMN department VARCHAR(255) NOT NULL;
+-- Create table reports
+CREATE TABLE Reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    file_path VARCHAR(255),
+    employee_id INT NOT NULL,
+    manager_id INT,
+    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- Create table AbsenceRequest
+CREATE TABLE AbsenceRequests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    employee_id INT NOT NULL,
+    manager_id INT,
+    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 
