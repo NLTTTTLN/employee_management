@@ -1,0 +1,608 @@
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/FZ Poppins-Medium.ttf') format('truetype'); 
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* General styling */
+body {
+    font-family: Poppins, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+	font-family: Poppins, sans-serif;
+    width: 250px;
+    background-color: white; /* Red color */
+    color: #d32f2f;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 4px;
+    transition: width 0.3s ease, transform 0.3s ease; /* Added transform to transition */
+    overflow: hidden; /* Prevent content overflow */
+}
+.logo {
+    padding: 20px;
+    text-align: center;
+}
+
+.logo-img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.icon {
+    width: 20px; /* Adjust size as needed */
+    height: 20px;
+    margin-right: 10px; /* Space between icon and text */
+    vertical-align: middle; /* Align with the button text */
+}
+
+
+
+.sidebar.collapsed {
+    width: 0;
+    transform: translateX(-100%); /* Move the sidebar off-screen */
+    
+}
+
+.sidebar .logo {
+    padding: 20px;
+    text-align: center;
+}
+
+.sidebar .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+
+.sidebar .bottom-link {
+	list-style: none;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+/* Sidebar button styling */
+.sidebar .nav-links li button {
+	font-family: Poppins, sans-serif;
+	font-weight: bold;
+    color: #d32f2f; /* Red text color */
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 16px;
+    text-align: left;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.sidebar .nav-links li button:hover {
+    background-color: #F2F2F2;
+}
+
+/* Active/clicked effect */
+.sidebar .nav-links li.active button, /* Default active button */
+.sidebar .nav-links li button:active {
+    background-color: #d32f2f; /* Fully red background when active/clicked */
+    color: white; /* White text */
+}
+
+.sidebar .bottom-link li button {
+	font-family: Poppins, sans-serif;
+	font-weight: bold;
+	background-color: #d32f2f;
+    color: white; /* Red text color */
+    border: none;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+.sidebar .bottom-link button:hover {
+    background-color: #b71c1c; /* Darker red on hover */
+}
+
+/* Main content styling */
+.content {
+	font-family: Poppins, sans-serif;
+    flex-grow: 1;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+.toggle-btn {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #b71c1c; /* Darker red on hover */
+}
+
+.dashboard {
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Space above the dashboard */
+}
+
+.dashboard h2 {
+    margin-bottom: 20px;
+}
+
+.dashboard-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat h3 {
+    color: #d32f2f; /* Red color for titles */
+}
+
+.recent-activities h4 {
+    margin-top: 20px;
+}
+
+.recent-activities ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0;
+}
+
+.recent-activities li {
+    margin: 5px 0;
+    font-family: Poppins, sans-serif;
+	font-weight: 400;
+}
+/* Add this to your style.css file */
+
+/* Recent activities layout */
+.activity-container {
+    display: flex;
+    justify-content: space-between; /* Space between sections */
+    margin-top: 20px; /* Space above the sections */
+}
+
+.activity-section {
+    flex: 1; /* Equal width for both sections */
+    margin-right: 10px; /* Space between sections */
+}
+
+.activity-section:last-child {
+    margin-right: 0; /* Remove margin for the last section */
+}
+
+ .dashboard table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+.dashboard th,td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            font-family: Poppins, sans-serif;
+
+        }
+.dashboard th {
+            padding: 10px;
+   			text-align: left;
+    		border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f4f4f4;
+            font-weight: 600;
+            position: sticky;
+    		top: 0; /* Stick to the top when scrolling */
+   			z-index: 2; /* Ensure the header stays above the table content */
+        }
+        
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 250px;
+    }
+}
+
+.management {
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Space above the dashboard */
+    font-family: Poppins, sans-serif;
+    overflow-y: auto;
+}
+
+/* Table Containers */
+.management .table-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.management .table-box {
+    width: 48%; /* Adjust width as needed */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.management .scrollable-table {
+    max-height: 300px; /* Set the maximum height for scroll */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    
+    
+}
+
+/* Table Styles */
+.management table {
+	border-radius: 4px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.management table th{
+            padding: 10px;
+            font-family: Poppins, sans-serif;
+}
+.management table thead tr {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	color: white;
+    background-color:  #d32f2f;
+    font-weight: 600;
+    position: sticky;
+    top: -0.1; /* Stick to the top when scrolling */
+    z-index: 1; /* Ensure the header stays above the table content */ /* Optional: to make it look cleaner when sticky */
+}
+
+.management table tbody tr {
+	
+	border-bottom: 1px solid #ddd;
+}
+.management table tbody td {
+	
+	border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+
+}
+
+
+/* Container for action buttons (Delete and Promote) */
+.management .button-container {
+    position: relative; /* Changed from absolute to relative */
+    top: 0;
+    right: 0;
+    z-index: 0;
+    margin-top: 10px; /* Adds some space from the top of the container */
+    text-align: right; /* Align the button to the right */
+}
+
+.management .action-btn {
+	font-family: Poppins, sans-serif;
+    padding: 10px 20px;
+    margin: 5px;
+    margin-bottom: 10px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.management .action-btn:hover {
+    background-color: #b71c1c;
+}
+
+/* Modal Styling */
+.management .modal {
+	font-family: Poppins, sans-serif;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.management .modal-content {
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 50%; /* Adjust width as needed */
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: Poppins, sans-serif;
+}
+
+/* Close Button */
+.management .close-btn {
+    color: #d32f2f;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.management .close-btn:hover {
+    color: #b71c1c;
+}
+
+/* Input Fields */
+.management .modal-content label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    text-align: left;
+}
+
+.management .modal-content input,
+.management .modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+.management .modal-content button {
+    background-color: #d32f2f;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.management .modal-content button:hover {
+    background-color: #b71c1c;
+}
+
+/* Align items properly */
+.management .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+
+
+
+
+/* MANAGER MANAGEMENT CSS STYLE */
+
+		.manager_management {
+		    background-color: #ffffff; /* White background */
+		    padding: 20px;
+		    border-radius: 8px;
+		    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		    margin-top: 20px; /* Space above the dashboard */
+		    font-family: Poppins, sans-serif;
+		    overflow-y: auto;
+		}
+		
+		/* Table Containers */
+		.manager_management .table-container {
+		    display: flex;
+		    gap: 20px;
+		    width: 100%;
+		}
+		
+		.manager_management .table-box {
+		    width: 100%; /* Adjust width as needed */
+		    background-color: #f9f9f9;
+		    border: 1px solid #ddd;
+		    padding: 10px;
+		    border-radius: 4px;
+		}
+		
+		.manager_management .scrollable-table {
+		    max-height: 600px; /* Set the maximum height for scroll */
+		    overflow-y: auto; /* Enable vertical scrollbar */
+		    
+		    
+		}
+		
+		/* Table Styles */
+		.manager_management table {
+			border-radius: 4px;
+		    width: 100%;
+		    border-collapse: collapse;
+		    margin-bottom: 10px;
+		}
+		
+		.manager_management table th{
+		            padding: 10px;
+		            font-family: Poppins, sans-serif;
+		}
+		.manager_management table thead tr {
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			color: white;
+		    background-color:  #d32f2f;
+		    font-weight: 600;
+		    position: sticky;
+		    top: -0.1; /* Stick to the top when scrolling */
+		    z-index: 1; /* Ensure the header stays above the table content */ /* Optional: to make it look cleaner when sticky */
+		}
+		
+		.manager_management table tbody tr {
+			
+			border-bottom: 1px solid #ddd;
+		}
+		.manager_management table tbody td {
+			font-family: Poppins, sans-serif;
+			border: 1px solid #ddd;
+		    padding: 8px;
+		    text-align: left;
+		
+		}
+		
+		
+		/* Container for action buttons (Delete and Promote) */
+		.manager_management .button-container {
+		    position: relative; /* Changed from absolute to relative */
+		    top: 0;
+		    right: 0;
+		    z-index: 0;
+		    margin-top: 10px; /* Adds some space from the top of the container */
+		    text-align: right; /* Align the button to the right */
+		}
+		
+		.manager_management .action-btn {
+			font-family: Poppins, sans-serif;
+		    padding: 10px 20px;
+		    margin: 5px;
+		    margin-bottom: 10px;
+		    background-color: #d32f2f;
+		    color: white;
+		    border: none;
+		    cursor: pointer;
+		    border-radius: 4px;
+		    transition: all 0.3s ease;
+		}
+		
+		.manager_management .action-btn:hover {
+		    background-color: #b71c1c;
+		}
+		
+		/* Modal Styling */
+		.manager_management .modal {
+			font-family: Poppins, sans-serif;
+		    display: none;
+		    position: fixed;
+		    z-index: 1;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    overflow: auto;
+		    background-color: rgba(0, 0, 0, 0.4);
+		    border-radius: 4px;
+		    transition: all 0.3s ease;
+		}
+		
+		.manager_management .modal-content {
+		    background-color: #ffffff;
+		    margin: 10% auto;
+		    padding: 20px;
+		    border: 1px solid #ddd;
+		    border-radius: 8px;
+		    width: 50%; /* Adjust width as needed */
+		    max-width: 500px;
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		    font-family: Poppins, sans-serif;
+		}
+		
+		/* Close Button */
+		.manager_management .close-btn {
+		    color: #d32f2f;
+		    float: right;
+		    font-size: 24px;
+		    font-weight: bold;
+		    cursor: pointer;
+		    transition: color 0.3s ease;
+		}
+		
+		.manager_management .close-btn:hover {
+		    color: #b71c1c;
+		}
+		
+		/* Input Fields */
+		.manager_management .modal-content label {
+		    display: block;
+		    font-size: 14px;
+		    font-weight: bold;
+		    margin-bottom: 8px;
+		    color: #333;
+		    text-align: left;
+		}
+		
+		.manager_management .modal-content input,
+		.manager_management .modal-content select {
+		    width: 100%;
+		    padding: 10px;
+		    margin-bottom: 15px;
+		    border: 1px solid #ddd;
+		    border-radius: 4px;
+		    font-size: 14px;
+		    box-sizing: border-box;
+		}
+		
+		/* Buttons */
+		.manager_management .modal-content button {
+		    background-color: #d32f2f;
+		    color: white;
+		    padding: 10px 15px;
+		    border: none;
+		    border-radius: 4px;
+		    font-size: 16px;
+		    cursor: pointer;
+		    width: 100%;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.manager_management .modal-content button:hover {
+		    background-color: #b71c1c;
+		}
+		
+		/* Align items properly */
+		.manager_management .form-group {
+		    margin-bottom: 15px;
+		    text-align: left;
+		}
+
