@@ -1,21 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.querySelector('.sidebar');
     const toggleButton = document.querySelector('.toggle-btn');
+    const modal = document.getElementById('actionModal');
     const addModal = document.getElementById('addModal');
+    const employeeListEdit = document.getElementById('employeeListEdit');
+    const confirmButton = document.getElementById('confirmActionBtn');
+    const modalTitle = document.querySelector('#actionModal h3');
+    const closeBtn = document.getElementById('closeBtn');
+    const closeAddBtn = document.getElementById('closeAddBtn');
     const editSelectModal = document.getElementById('editSelectModal');
     const editModal = document.getElementById('editModal');
     const deleteModal = document.getElementById('deleteModal');
-    const closeAddBtn = document.getElementById('closeAddBtn');
-    const closeEditSelectBtn = document.getElementById('closeEditSelectBtn');
-    const closeEditBtn = document.getElementById('closeEditBtn');
     const closeDeleteBtn = document.getElementById('closeDeleteBtn');
-    const confirmAddBtn = document.getElementById('confirmAddBtn');
+    const closeEditSelectBtn = document.getElementById('closeEditSelectBtn');
     const confirmSelectBtn = document.getElementById('confirmSelectBtn');
     const confirmEditBtn = document.getElementById('confirmEditBtn');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const employeeListEdit = document.getElementById('employeeListEdit');
-    const employeeList = document.getElementById('employeeList');
-
     // SIDEBAR SCRIPT
     window.toggleSidebar = function() {
         if (sidebar) {
@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // POPULATE EMPLOYEE USERNAME
     function populateEmployeeUsername(employees) {
+        const employeeList = document.getElementById('employeeList');
+        const employeeListEdit = document.getElementById('employeeListEdit');
         if (employeeList && employeeListEdit) {
             employeeList.innerHTML = ''; // Clear previous options
             employeeListEdit.innerHTML = ''; // Clear previous options
@@ -114,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    const confirmAddBtn = document.getElementById('confirmAddBtn');
     if (confirmAddBtn) {
         confirmAddBtn.onclick = function() {
             const username = document.getElementById('username').value;
@@ -200,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (searchEmployeeInput) {
         searchEmployeeInput.addEventListener('input', function() {
             const searchQuery = this.value.toLowerCase();
+            const employeeList = document.getElementById('employeeList');
             if (employeeList) {
                 const options = employeeList.getElementsByTagName('option');
                 Array.from(options).forEach(option => {
@@ -209,6 +213,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function selectEmployee() {
+        const deleteUsername = document.getElementById('employeeList').value;
+        const selectUsername = document.getElementById('selectUsername');
+        if (selectUsername) {
+            selectUsername.value = deleteUsername;
+        }
+    }
+
+    const employeeList = document.getElementById('employeeList');
     if (employeeList) {
         employeeList.addEventListener('change', function() {
             const deleteUsername = document.getElementById('deleteUsername');
@@ -279,10 +292,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     const searchEditEmployeeInput = document.getElementById('searchEditEmployee');
     if (searchEditEmployeeInput) {
         searchEditEmployeeInput.addEventListener('input', function() {
             const searchQuery = this.value.toLowerCase();
+            const employeeListEdit = document.getElementById('employeeListEdit');
             if (employeeListEdit) {
                 const options = employeeListEdit.getElementsByTagName('option');
                 Array.from(options).forEach(option => {
@@ -292,49 +307,63 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function selectEditEmployee() {
-        const selectEditUsername = document.getElementById('employeeListEdit').value;
-        const selectUsername = document.getElementById('selectEditUsername');
-        if (selectUsername) {
-            selectUsername.value = selectEditUsername;
-        }
-    }
 
-    if (employeeListEdit) {
-        employeeListEdit.addEventListener('change', function() {
-            selectEditEmployee();
-        });
-    }
 
-    if (confirmSelectBtn) {
-        confirmSelectBtn.onclick = function() {
-            const selectEditUsername = document.getElementById('selectEditUsername').value;
-            if (selectEditUsername) {
-                openEditModal(selectEditUsername);
-            } else {
-                alert('Please select an employee.');
-            }
-        };
-    }
+	// When you select an employee
+	function selectEditEmployee() {
+	    const selectEditUsername = document.getElementById('employeeListEdit').value;
+	    const selectedUsernameInput = document.getElementById('selectedEditUsername');
+	    
+	    if (selectEditUsername && selectedUsernameInput) {
+	        selectedUsernameInput.value = selectEditUsername; // Set the selected employee's username
+	        console.log('Selected employee:', selectEditUsername); // Debugging
+	        
+	        // Fetch the full employee data and populate the edit modal
+	        fetch(`/employee_management/manager/get-employee?username=${encodeURIComponent(selectEditUsername)}`)
+	            .then(response => response.json())
+	            .then(data => {
+					console.log('Employee Data:', data);
+	                if (data) {
+	                    // Populate the fields in the edit modal with the employee's data
+						document.getElementById('editUsername').value = data.username;
+	                    document.getElementById('editName').value = data.name;
+	                    document.getElementById('editGender').value = data.gender;
+	                    document.getElementById('editDob').value = data.dob;
+	                    document.getElementById('editEmail').value = data.email;
+	                    document.getElementById('editPhone_num').value = data.phone_num;
+	                    document.getElementById('editAddress').value = data.address;
+	                    document.getElementById('editDepartment').value = data.department;
+	                    document.getElementById('editSalary').value = data.salary;
+	                } else {
+	                    alert('Employee data not found.');
+	                }
+	            })
+	            .catch(error => {
+	                console.error('Error fetching employee data:', error);
+	                alert('Error fetching employee data');
+	            });
+	    }
+	}
 
-    function openEditModal(username) {
+	// Event listener for dropdown change
+	document.getElementById('employeeListEdit').addEventListener('change', selectEditEmployee);
+
+	// Confirm button action (this should open the edit modal)
+	if (confirmSelectBtn) {
+	    confirmSelectBtn.onclick = function() {
+	        const selectEditUsername = document.getElementById('employeeListEdit').value;
+	        if (selectEditUsername) {
+	            selectedEditEmployee = { username: selectEditUsername };
+	            openEditModal();
+	        } else {
+	            alert('Please select an employee.');
+	        }
+	    };
+	}
+
+    function openEditModal() {
         if (editModal) {
-            // Fetch the employee data to pre-fill the form
-            fetch(`/employee_management/manager/get-employee?username=${encodeURIComponent(username)}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('editUsername').value = data.username;
-                    document.getElementById('editName').value = data.name;
-                    document.getElementById('editGender').value = data.gender;
-                    document.getElementById('editDob').value = data.dob;
-                    document.getElementById('editEmail').value = data.email;
-                    document.getElementById('editPhone_num').value = data.phone_num;
-                    document.getElementById('editAddress').value = data.address;
-                    document.getElementById('editDepartment').value = data.department;
-                    document.getElementById('editSalary').value = data.salary;
-                    editModal.style.display = 'block';
-                })
-                .catch(error => console.error('Error fetching employee data:', error));
+            editModal.style.display = 'block';
         }
     }
 
@@ -370,7 +399,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
     }
-
     function editEmployee(username, name, gender, dob, email, phone_num, address, department, salary) {
         fetch('/employee_management/manager/edit', {
             method: 'POST',
