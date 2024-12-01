@@ -53,6 +53,15 @@ public class ManagerService {
             throw new RuntimeException("Failed to fetch pending reports and requests", e);
         }
     }
+    
+    public EmployeeSubmitItem getSubmitItemDetail(Integer itemId, String itemType) {
+        if ("Report".equalsIgnoreCase(itemType)) {
+            return managerDAO.getReportDetail(itemId);  // Fetch report detail
+        } else if ("Absence Request".equalsIgnoreCase(itemType)) {
+            return managerDAO.getAbsenceRequestDetail(itemId);  // Fetch absence request detail
+        }
+        return null;  // If invalid type, return null or handle accordingly
+    }
 
     // Fetch all employees
     public List<Employee> getAllEmployees() {
@@ -84,6 +93,8 @@ public class ManagerService {
             return false;
         }
     }
+    
+    
 
 
 }
