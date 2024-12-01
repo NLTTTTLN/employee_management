@@ -22,3 +22,4 @@ build/classes/employee_management/interceptor/LoginInterceptor.class
 build/classes/employee_management/dao/AccountDAO.class
 build/classes/employee_management/service/AccountService.class
 build/classes/employee_management/service/ManagerService.class
+WebContent/META-INF/MANIFEST.MF
