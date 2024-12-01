@@ -36,43 +36,53 @@
                       <div class="dashboard">
                 <h2>Dashboard</h2>
                 <div class="dashboard-stats">
-                    <div class="stat">
-                        <h3>Số lượng quản lý</h3>
-                        <p id="managerCount">0</p>
-                    </div>
+        
                     <div class="stat">
                         <h3>Số lượng nhân viên</h3>
                         <p id="employeeCount">0</p>
                     </div>
                 </div>
 
-                <h3>Lịch sử hoạt động</h3>
+                <h3>Bảng thông báo</h3>
                 <div class="recent-activities">
-					<div class="activity-container">
-                            <div class="activity-section">
-                                <table id="managerActivitiesTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Quản lý</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="managerActivities">
-                                        <!-- Recent activities by managers will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="activity-section">
-                                <table id="employeeActivitiesTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Nhân viên</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="employeeActivities">
-                                        <!-- Recent activities by employees will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>	
+					<div class="submit-container">
+                             <table class="submit-table">
+						        <thead>
+						            <tr>
+						                <th>Type</th>
+						                <th>Title/Description</th>
+						                <th>Submitted By</th>
+						                <th>Date</th>
+						            </tr>
+						        </thead>
+						        <tbody>
+						            <c:forEach var="item" items="${reportsAndRequests}">
+						                <tr class="report-row" data-id="${item.id}" data-type="${item.type}">
+						                    <td>${item.type}</td>
+						                    <td>${item.title}</td>
+						                    <td>${item.submittedBy}</td>
+						                    <td>${item.date}</td>
+						                </tr>
+						            </c:forEach>
+						        </tbody>
+						    </table>
+                
+                 <!-- Modal -->
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h3 id="modalTitle">Details</h3>
+                        <div id="modalBody">
+                            <!-- Details will be dynamically loaded here -->
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn approve" onclick="handleApproval('Approved')">Approve</button>
+                            <button class="btn reject" onclick="handleApproval('Rejected')">Reject</button>
+                        </div>
+                    </div>
+                </div>
+                
+                
                 </div>
             </div>
             </div>

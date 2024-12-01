@@ -171,14 +171,14 @@
                             <br><br>
                     
                             <!-- Employee List Dropdown -->
-                            <select id="employeeListEdit" name="employeeListEdit" size="5" style="width: 100%;" onchange="selectEditEmployee()">
+                            <select id="employeeListEdit" name="employeeListEdit" size="5" style="width: 100%;">
                                 <option value="">Chọn nhân viên</option>
                             </select>
                             <br>
                     
                             <form id="editUserForm">
                                 <label for="selectEditUsername">Nhân viên được chọn:</label>
-                                <input type="text" id="selectEditUsername" name="selectEditUsername" placeholder="Tên tài khoản" readonly>
+                                <input type="text" id="selectedEditUsername" name="selectedEditUsername" placeholder="Tên tài khoản" readonly>
                                 <br>
                                 <button type="button" id="confirmSelectBtn">Sửa</button>
                             </form>
@@ -191,19 +191,17 @@
                             <span class="close-btn" id="closeEditBtn">&times;</span>
                             <h3>Sửa thông tin nhân viên</h3>
                             <form id="editUserForm">
-                                <label for="editUsername">Tên tài khoản:</label>
-                                <input type="text" id="editUsername" name="username" placeholder="Tên tài khoản" readonly>
-                                <br>
-                    
+                            
+                    			<input type="hidden" id="editUsername" name="username">
                                 <label for="editName">Tên đầy đủ:</label>
                                 <input type="text" id="editName" name="name" placeholder="Tên đầy đủ" required>
                                 <br>
                     
                                 <label for="editGender">Giới tính:</label>
                                 <select id="editGender" name="gender" required>
-                                    <option value="male">Nam</option>
-                                    <option value="female">Nữ</option>
-                                    <option value="other">Khác</option>
+                                    <option value="Male">Nam</option>
+                                    <option value="Female">Nữ</option>
+                                    <option value="Other">Khác</option>
                                 </select>
                                 <br>
                     

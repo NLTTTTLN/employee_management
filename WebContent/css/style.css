@@ -48,7 +48,10 @@ body {
     vertical-align: middle; /* Align with the button text */
 }
 
-
+p{
+	font-family: Poppins, sans-serif;
+	font-weight:bold;
+}
 
 .sidebar.collapsed {
     width: 0;
@@ -485,7 +488,9 @@ body {
 			border-bottom: 1px solid #ddd;
 		}
 		.manager_management table tbody td {
+			font-size: 15px;
 			font-family: Poppins, sans-serif;
+			font-weight: bold;
 			border: 1px solid #ddd;
 		    padding: 8px;
 		    text-align: left;
