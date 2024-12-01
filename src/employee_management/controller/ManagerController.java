@@ -63,6 +63,15 @@ public class ManagerController {
 
         return response;
     }
+	
+	@RequestMapping(value = "/submit-detail", method = RequestMethod.GET)
+	@ResponseBody
+	public EmployeeSubmitItem getSubmitDetail(@RequestParam("itemId") Integer itemId, @RequestParam("itemType") String itemType) {
+		System.out.println("Searching submit item with id: " + itemId + ", type:" + itemType);
+		EmployeeSubmitItem item = managerService.getSubmitItemDetail(itemId, itemType);
+		System.out.println("Found Submit Item: " + item);
+	    return item; // Return the employee as JSON
+	}
 
 	@RequestMapping(value = "/management", method = RequestMethod.GET)
 	public String showManagerManagementPage(Model model) {
