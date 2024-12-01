@@ -26,18 +26,104 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // FETCHING DATA FROM DATABASE
-    function fetchDashboardData() {
-        fetch('/employee_management/manager/dashboard-info')
-            .then(response => response.json())
-            .then(data => {
-                const employeeCount = document.getElementById('employeeCount');
-                if (employeeCount) {
-                    employeeCount.textContent = data.employeeCount;
-                }
-            })
-            .catch(error => console.error('Error fetching dashboard data:', error));
-    }
-    fetchDashboardData();
+	// FETCHING DATA FROM DATABASE
+	function fetchDashboardData() {
+	    fetch('/employee_management/manager/dashboard-info')
+	        .then(response => response.json())
+	        .then(data => {
+	            // Update the dashboard with counts
+	            document.getElementById('employee-count').textContent = data.employeeCount || 0;  // Assuming employee count exists in the response or needs to be handled
+
+	            // Set pending counts
+	            document.getElementById('pending-absence-count').textContent = data.pendingAbsenceCount;
+	            document.getElementById('pending-report-count').textContent = data.pendingReportCount;
+
+	            // Populate the table with pending items (both Absence and Report)
+	            const tableBody = document.querySelector('#pending-table tbody');
+	            tableBody.innerHTML = ''; // Clear existing rows
+
+	            // Loop through each pending item and add a new row to the table
+	            data.pendingItems.forEach(item => {
+	                const row = document.createElement('tr');
+	                row.classList.add('pending-item');
+	                row.setAttribute('onclick', `openModal('${item.id}', '${item.type}', '${item.title}', '${item.submittedBy}', '${item.date}')`);
+
+	                const typeCell = document.createElement('td');
+	                typeCell.textContent = item.type;
+	                const titleCell = document.createElement('td');
+	                titleCell.textContent = item.title;
+	                const submittedByCell = document.createElement('td');
+	                submittedByCell.textContent = item.submittedBy;  // Display employee name
+	                const dateCell = document.createElement('td');
+	                dateCell.textContent = new Date(item.date).toLocaleDateString();  // Format date
+
+	                // Append cells to the row
+	                row.appendChild(typeCell);
+	                row.appendChild(titleCell);
+	                row.appendChild(submittedByCell);
+	                row.appendChild(dateCell);
+
+	                // Append the row to the table body
+	                tableBody.appendChild(row);
+	            });
+	        })
+	        .catch(error => console.error('Error fetching dashboard data:', error));
+	}
+
+	fetchDashboardData();
+
+
+	
+	// Function to open the modal and load data dynamically
+	function openModal(reportId) {
+	    // Fetch report details based on the ID
+	    fetch(`/manager/reportDetails/${reportId}`)
+	        .then(response => response.json())
+	        .then(data => {
+	            // Populate modal content with data
+	            document.getElementById('modalTitle').textContent = data.title;
+	            document.getElementById('modalBody').innerHTML = `
+	                <p><strong>Type:</strong> ${data.type}</p>
+	                <p><strong>Description:</strong> ${data.description}</p>
+	                <p><strong>Submitted By:</strong> ${data.submittedBy}</p>
+	                <p><strong>Date:</strong> ${data.date}</p>
+	            `;
+	            // Store report ID in the modal to use in the approval/rejection actions
+	            document.getElementById('modal').setAttribute('data-report-id', reportId);
+	            document.getElementById('modal').style.display = 'block';
+	        })
+	        .catch(error => console.error('Error fetching report details:', error));
+	}
+
+	// Function to close the modal
+	function closeModal() {
+	    document.getElementById('modal').style.display = 'none';
+	}
+
+	// Function to handle approval/rejection actions
+	function handleApproval(action) {
+	    const reportId = document.getElementById('modal').getAttribute('data-report-id');
+	    fetch(`/manager/handleApproval/${reportId}`, {
+	        method: 'POST',
+	        body: JSON.stringify({ status: action }),
+	        headers: { 'Content-Type': 'application/json' }
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        alert(`Report ${action.toLowerCase()} successfully.`);
+	        closeModal(); // Close modal after action
+	        location.reload(); // Refresh the page to show updated status
+	    })
+	    .catch(error => console.error('Error handling approval/rejection:', error));
+	}
+
+	// Function to attach modal opening to each report row
+	document.querySelectorAll('.report-row').forEach(row => {
+	    row.addEventListener('click', () => {
+	        const reportId = row.getAttribute('data-id');
+	        openModal(reportId);
+	    });
+	});
 
     function fetchEmployee() {
         fetch('/employee_management/manager/management-data')
