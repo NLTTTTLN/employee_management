@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	            data.pendingItems.forEach(item => {
 	                const row = document.createElement('tr');
 	                row.classList.add('pending-item');
-	                row.setAttribute('onclick', `openModal('${item.id}', '${item.type}', '${item.title}', '${item.submittedBy}', '${item.date}')`);
 
 	                const typeCell = document.createElement('td');
 	                typeCell.textContent = item.type;
@@ -65,6 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	                // Append the row to the table body
 	                tableBody.appendChild(row);
+					// Add click event listener to the row to trigger the modal
+					               row.addEventListener('click', function() {
+					                   const itemId = row.getAttribute('data-id');
+					                   const itemType = row.getAttribute('data-type');
+					                   openSubmitDetailModal(item.id, item.type);
+					               });
 	            });
 	        })
 	        .catch(error => console.error('Error fetching dashboard data:', error));
@@ -75,28 +80,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	
 	// Function to open the modal and load data dynamically
-	function openModal(reportId) {
-	    // Fetch report details based on the ID
-	    fetch(`/manager/reportDetails/${reportId}`)
-	        .then(response => response.json())
+	function openSubmitDetailModal(itemId, itemType) {
+	    console.log("itemID: " + itemId);
+	    console.log("itemType: " + itemType);
+
+	    // Construct the URL with query parameters
+	    const apiUrl = `/employee_management/manager/submit-detail?itemId=${encodeURIComponent(itemId)}&itemType=${encodeURIComponent(itemType)}`;
+
+	    // Send a GET request with query parameters
+	    fetch(apiUrl)
+	        .then(response => {
+	            // Check if the response is not ok
+	            if (!response.ok) {
+	                throw new Error('Network response was not ok');
+	            }
+	            return response.json(); // Parse the JSON if successful
+	        })
 	        .then(data => {
 	            // Populate modal content with data
-	            document.getElementById('modalTitle').textContent = data.title;
+	            document.getElementById('modal-title').textContent = data.title;
 	            document.getElementById('modalBody').innerHTML = `
 	                <p><strong>Type:</strong> ${data.type}</p>
 	                <p><strong>Description:</strong> ${data.description}</p>
 	                <p><strong>Submitted By:</strong> ${data.submittedBy}</p>
 	                <p><strong>Date:</strong> ${data.date}</p>
 	            `;
-	            // Store report ID in the modal to use in the approval/rejection actions
-	            document.getElementById('modal').setAttribute('data-report-id', reportId);
-	            document.getElementById('modal').style.display = 'block';
+	            // Store item ID in the modal to use in the approval/rejection actions
+	            document.getElementById('modal').setAttribute('data-item-id', itemId);
+	            document.getElementById('modal').style.display = 'block'; // Show the modal
 	        })
-	        .catch(error => console.error('Error fetching report details:', error));
+	        .catch(error => console.error('Error fetching submit item details:', error));
 	}
 
+
 	// Function to close the modal
-	function closeModal() {
+	function closeSubmitDetailModal() {
 	    document.getElementById('modal').style.display = 'none';
 	}
 
@@ -117,13 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	    .catch(error => console.error('Error handling approval/rejection:', error));
 	}
 
-	// Function to attach modal opening to each report row
-	document.querySelectorAll('.report-row').forEach(row => {
-	    row.addEventListener('click', () => {
-	        const reportId = row.getAttribute('data-id');
-	        openModal(reportId);
-	    });
-	});
 
     function fetchEmployee() {
         fetch('/employee_management/manager/management-data')
