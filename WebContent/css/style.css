@@ -61,8 +61,14 @@ p{
 
 .sidebar .logo {
     padding: 20px;
+    padding-bottom:0px;
+    margin-bottom:50px;
     text-align: center;
+    border-radius: 13px;
+    	font-size:17px;
 }
+
+
 
 .sidebar .nav-links {
     list-style: none;
@@ -162,10 +168,216 @@ p{
     margin-bottom: 20px;
 }
 
+.dashboard span{
+	color: #d32f2f;
+}
+
 .dashboard-stats {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
+}
+
+.dashboard body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.dashboard {
+  padding: 20px;
+}
+
+/* Container for the dashboard header */
+.dashboard-header {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: flex-start;
+    align-items: flex-start;  /* Align to the left initially */
+    position: relative;
+    height: 150px;  /* Adjust height as per your design */
+    margin-top: 20px;
+    padding: 10px;
+}
+
+/* Positioning the h2 tag */
+.dashboard-header h2 {
+    margin: 0;
+    padding-bottom: 10px;  /* Space between title and other sections */
+}
+
+/* Employee count on the left, top of the dashboard */
+.employee-count {
+    position: absolute;
+    top: 75px; /* Adjust based on the header height */
+    left: 40px;
+    font-size: 14px;
+}
+
+/* Pending report on the top right */
+.pending-report {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    font-size: 14px;
+}
+
+/* Pending absence at the bottom right */
+.pending-absence {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 14px;
+}
+
+/* Optional: Adjust the styles for the inner content like the h3 text */
+.dashboard-header h3 {
+    margin: 0;
+}
+
+/* Optional: Add some styling for the boxes to make them look better */
+.dashboard-header .employee-count,
+.dashboard-header .pending-report,
+.dashboard-header .pending-absence {
+    background-color: #f2f2f2; /* Light gray background */
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* For responsive design */
+@media (max-width: 768px) {
+    .dashboard-header {
+        height: auto;  /* Let the height adjust for smaller screens */
+    }
+
+    /* Adjust for small screens */
+    .employee-count,
+    .pending-report,
+    .pending-absence {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin-bottom: 10px;
+    }
+}
+ .dashboard table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+.dashboard th,td {
+            padding: 8px;
+            text-align: left;
+            font-family: Poppins, sans-serif;
+
+        }
+.dashboard th {
+            padding: 10px;
+   			text-align: left;
+    		border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f4f4f4;
+            font-weight: 600;
+            position: sticky;
+    		top: 0; /* Stick to the top when scrolling */
+   			z-index: 2; /* Ensure the header stays above the table content */
+        }
+.dashboard .employee-count, .pending-absence, .pending-report {
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard .top-right {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard .table-section {
+  margin-top: 20px;
+  background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.dashboard th {
+	background: #d32f2f;
+	color: white;
+	font-size:20px;
+  border: 1px solid #ddd;
+}
+.dashboard thead {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+    z-index: 1;  /* Keeps the header on top when scrolling */
+}
+.dashboard .pending-item td{
+	font-family: Poppins, sans-serif;
+	font-weight:600;
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+  	text-align: left;
+	
+}
+
+.dashboard .pending-item {
+	transition: all 0.3s ease;
+}
+.dashboard .pending-item:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+
+
+/* Modal styling */
+#submit-detail-modal .modal-content {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+ modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 400px;
+  text-align: center;
+}
+
+ modal-buttons {
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+}
+.close-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+ .close-btn:hover {
+  background-color: #ff1a1a;
 }
 
 .stat {
@@ -208,29 +420,7 @@ p{
     margin-right: 0; /* Remove margin for the last section */
 }
 
- .dashboard table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-.dashboard th,td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            font-family: Poppins, sans-serif;
 
-        }
-.dashboard th {
-            padding: 10px;
-   			text-align: left;
-    		border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f4f4f4;
-            font-weight: 600;
-            position: sticky;
-    		top: 0; /* Stick to the top when scrolling */
-   			z-index: 2; /* Ensure the header stays above the table content */
-        }
         
 
 
@@ -610,106 +800,7 @@ p{
 		    margin-bottom: 15px;
 		    text-align: left;
 		}
-.dashboard body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-}
 
-.dashboard {
-  padding: 20px;
-}
 
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
 
-.dashboard .employee-count, .pending-absence, .pending-report {
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard .top-right {
-  display: flex;
-  gap: 20px;
-}
-
-.dashboard .table-section {
-  margin-top: 20px;
-}
-
-.dashboard table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard th, td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-.dashboard th {
-  background-color: #f0f0f0;
-}
-
-.dashboard .pending-item:hover {
-  background-color: #f7f7f7;
-  cursor: pointer;
-}
-
-.dashboard .pending-item:active {
-  background-color: #e0e0e0;
-}
-
-/* Modal styling */
-.submit-detail-modal .modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
- modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 400px;
-  text-align: center;
-}
-
- modal-buttons {
-  margin-top: 20px;
-}
-
-.modal-buttons button {
-  padding: 10px 20px;
-  margin: 5px;
-  cursor: pointer;
-}
-.close-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #ff4d4d;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
- .close-btn:hover {
-  background-color: #ff1a1a;
-}
 
