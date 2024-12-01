@@ -4,6 +4,8 @@ public class EmployeeSubmitItem {
     private int id;
     private String type; // "Report" or "Absence Request"
     private String title;
+    private String description;
+    private String filePath;
     private String submittedBy;
     private String date;
     
@@ -21,10 +23,36 @@ public class EmployeeSubmitItem {
 	}
     
     
-    
+	public EmployeeSubmitItem(int id, String type, String title, String description, String filePath,
+			String submittedBy, String date) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.title = title;
+		this.description = description;
+		this.filePath = filePath;
+		this.submittedBy = submittedBy;
+		this.date = date;
+	}
+	
+	public EmployeeSubmitItem(int id, String type, String title, String description, String submittedBy, String date) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.title = title;
+		this.description = description;
+		this.submittedBy = submittedBy;
+		this.date = date;
+	}
     
     // Getters and Setters
     
+
+
+
+
+
+
 
 	public int getId() {
 		return id;
@@ -43,6 +71,21 @@ public class EmployeeSubmitItem {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 	public String getSubmittedBy() {
 		return submittedBy;
