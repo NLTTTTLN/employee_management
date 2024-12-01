@@ -42,22 +42,27 @@ public class ManagerController {
 		return "redirect:manager/dashboard";
 	}
 
-	@RequestMapping(value = "/dashboard-info", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> getDashboardData() {
-		// Assuming these methods exist in your AccountService
-		int employeeCount = managerService.getEmployeeCount(); // Get employee count
-		List<EmployeeSubmitItem> reportsAndRequests = managerService.getReportsAndRequests();
-		
-		// Prepare response data
-		Map<String, Object> dashboardData = new HashMap<>();
-		dashboardData.put("employeeCount", employeeCount);
-		dashboardData.put("reportsAndRequests", reportsAndRequests);
-		System.out.println("Employee Count: " + employeeCount);
-		System.out.println("Employee's reports and requets : " + reportsAndRequests);
-		
-		return dashboardData; // This will be returned as JSON
-	}
+	@RequestMapping(value ="/dashboard-info", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getDashboardInfo() {
+        Map<String, Object> response = new HashMap<>();
+
+        // Get counts
+        int pendingAbsenceCount = managerService.getPendingAbsenceCount();
+        int pendingReportCount = managerService.getPendingReportCount();
+        int employeeCount = managerService.getEmployeeCount();
+
+        // Get the list of pending reports and requests
+        List<EmployeeSubmitItem> pendingItems = managerService.getPendingReportsAndRequests();
+
+        // Add data to the response map
+        response.put("employeeCount", employeeCount);
+        response.put("pendingAbsenceCount", pendingAbsenceCount);
+        response.put("pendingReportCount", pendingReportCount);
+        response.put("pendingItems", pendingItems);
+
+        return response;
+    }
 
 	@RequestMapping(value = "/management", method = RequestMethod.GET)
 	public String showManagerManagementPage(Model model) {
