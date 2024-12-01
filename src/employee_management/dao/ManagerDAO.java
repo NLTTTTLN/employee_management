@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,33 +70,66 @@ public class ManagerDAO {
         return 0;
     }
     
-    //Get Employee's submit items
-    public List<EmployeeSubmitItem> getReportsAndRequests() throws SQLException {
+    // Method to get the count of pending absence requests
+    public int getPendingAbsenceCount() throws SQLException {
+        String query = "SELECT COUNT(*) FROM AbsenceRequests WHERE status = 'Pending'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);  // Return the count
+            }
+            return 0;
+        }
+    }
+
+    // Method to get the count of pending report requests
+    public int getPendingReportCount() throws SQLException {
+        String query = "SELECT COUNT(*) FROM Reports WHERE status = 'Pending'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);  // Return the count
+            }
+            return 0;
+        }
+    }
+
+    // Method to get both the pending reports and pending absence requests
+    public List<EmployeeSubmitItem> getPendingReportsAndRequests() throws SQLException {
         String query = """
-            SELECT id, 'Report' AS type, title, (SELECT name FROM Employee WHERE id = employee_id) AS submittedBy, created_at
-            FROM Reports
+            SELECT id, 'Report' AS type, title, e.name AS submittedBy, created_at
+            FROM Reports r
+            JOIN Employee e ON r.employee_id = e.employee_id
+            WHERE r.status = 'Pending'
             UNION
-            SELECT id, 'Absence Request' AS type, title, (SELECT name FROM Employee WHERE id = employee_id) AS submittedBy, created_at
-            FROM AbsenceRequests
+            SELECT id, 'Absence Request' AS type, title, e.name AS submittedBy, created_at
+            FROM AbsenceRequests ar
+            JOIN Employee e ON ar.employee_id = e.employee_id
+            WHERE ar.status = 'Pending'
             ORDER BY created_at DESC;
         """;
 
         List<EmployeeSubmitItem> items = new ArrayList<>();
-        try (Connection conn = getConnection();
-        	 PreparedStatement stmt = conn.prepareStatement(query);
+        try (Connection conn = getConnection();  // Get connection using your DB utility
+             PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-            	EmployeeSubmitItem item = new EmployeeSubmitItem();
+                EmployeeSubmitItem item = new EmployeeSubmitItem();
                 item.setId(rs.getInt("id"));
                 item.setType(rs.getString("type"));
                 item.setTitle(rs.getString("title"));
                 item.setSubmittedBy(rs.getString("submittedBy"));
-                item.setDate(rs.getString("created_at"));
+
+                // Convert timestamp to a readable date format
+                Timestamp timestamp = rs.getTimestamp("created_at");
+                item.setDate(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp));
+
                 items.add(item);
             }
         }
-        System.out.println("Items:" + items);
         return items;
     }
     
