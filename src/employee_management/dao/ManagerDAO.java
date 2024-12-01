@@ -133,6 +133,81 @@ public class ManagerDAO {
         return items;
     }
     
+ // Fetch Report details
+    public EmployeeSubmitItem getReportDetail(Integer itemId) {
+        String query = """
+            SELECT r.id, r.title, r.description, r.filePath, e.name AS submittedBy, r.created_at
+            FROM Reports r
+            JOIN Employee e ON r.employee_id = e.employee_id
+            WHERE r.id = ?;
+        """;
+
+        try (Connection conn = getConnection();  // Get connection using your DB utility
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, itemId);  // Set the itemId as the first parameter
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    EmployeeSubmitItem report = new EmployeeSubmitItem();
+                    report.setId(rs.getInt("id"));
+                    report.setType("Report");  // Set type as "Report"
+                    report.setTitle(rs.getString("title"));
+                    report.setDescription(rs.getString("description"));
+                    report.setFilePath(rs.getString("filePath"));
+                    report.setSubmittedBy(rs.getString("submittedBy"));
+
+                    // Convert timestamp to a readable date format
+                    Timestamp timestamp = rs.getTimestamp("created_at");
+                    report.setDate(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp));
+
+                    return report;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+ // Fetch Absence Request details
+    public EmployeeSubmitItem getAbsenceRequestDetail(Integer itemId) {
+        String query = """
+            SELECT ar.id, ar.title, ar.description, e.name AS submittedBy, ar.created_at
+            FROM AbsenceRequests ar
+            JOIN Employee e ON ar.employee_id = e.employee_id
+            WHERE ar.id = ?;
+        """;
+
+        try (Connection conn = getConnection();  // Get connection using your DB utility
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, itemId);  // Set the itemId as the first parameter
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    EmployeeSubmitItem absenceRequest = new EmployeeSubmitItem();
+                    absenceRequest.setId(rs.getInt("id"));
+                    absenceRequest.setType("Absence Request");  // Set type as "Absence Request"
+                    absenceRequest.setTitle(rs.getString("title"));
+                    absenceRequest.setDescription(rs.getString("description"));
+                    absenceRequest.setSubmittedBy(rs.getString("submittedBy"));
+
+                    // Convert timestamp to a readable date format
+                    Timestamp timestamp = rs.getTimestamp("created_at");
+                    absenceRequest.setDate(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp));
+
+                    return absenceRequest;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    
     // Fetch all employees
     public List<Employee> getAllEmployees() {
         String sql = "SELECT * FROM employee";
