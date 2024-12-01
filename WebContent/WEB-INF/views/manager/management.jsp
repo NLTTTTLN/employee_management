@@ -13,7 +13,6 @@
         <div class="sidebar">
             <div class="logo">
                 <img src="<c:url value='/images/Logo_PTIT_University.png'/>" alt="Logo" class="logo-img">
-                <h2>Quản lý nhân sự</h2>
             </div>
             <ul class="nav-links">
                 <li><button onclick="location.href='<c:url value='/manager/dashboard' />'">
