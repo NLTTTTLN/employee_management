@@ -1,5 +1,6 @@
 package employee_management.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,33 @@ public class ManagerService {
         return managerDAO.countEmployees(); 
     }
     
-    //Get employee's reports and requets
-    public List<EmployeeSubmitItem> getReportsAndRequests() {
+ // Get the count of pending absence requests
+    public int getPendingAbsenceCount() {
         try {
-            return managerDAO.getReportsAndRequests();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return managerDAO.getPendingAbsenceCount();
+        } catch (SQLException e) {
+            // Handle exception, perhaps log the error or throw a custom exception
+            throw new RuntimeException("Failed to fetch pending absence count", e);
+        }
+    }
+
+    // Get the count of pending report requests
+    public int getPendingReportCount() {
+        try {
+            return managerDAO.getPendingReportCount();
+        } catch (SQLException e) {
+            // Handle exception, perhaps log the error or throw a custom exception
+            throw new RuntimeException("Failed to fetch pending report count", e);
+        }
+    }
+
+    // Get the details of all pending reports and absence requests
+    public List<EmployeeSubmitItem> getPendingReportsAndRequests() {
+        try {
+            return managerDAO.getPendingReportsAndRequests();
+        } catch (SQLException e) {
+            // Handle exception
+            throw new RuntimeException("Failed to fetch pending reports and requests", e);
         }
     }
 
