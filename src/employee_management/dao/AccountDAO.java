@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import employee_management.bean.Account;
+import employee_management.bean.Employee;
 
 @Repository
 public class AccountDAO {
@@ -155,4 +156,94 @@ public class AccountDAO {
             e.printStackTrace();
         }
     }
+    public Integer getAccountId(String username) {
+        String roleSql = "SELECT role FROM account WHERE username = ?";
+        String idSql = null;
+        
+        try (Connection conn = getConnection();
+             PreparedStatement roleStmt = conn.prepareStatement(roleSql)) {
+
+            // Set the username parameter in the query to get the user's role
+            roleStmt.setString(1, username);
+
+            // Execute the query to retrieve the user's role
+            try (ResultSet roleRs = roleStmt.executeQuery()) {
+                if (roleRs.next()) {
+                    String role = roleRs.getString("role");
+                    
+                    // Based on the role, set the appropriate SQL query to fetch the ID
+                    if ("employee".equals(role)) {
+                        idSql = "SELECT employee_id FROM employee WHERE username = ?";
+                    } else if ("manager".equals(role)) {
+                        idSql = "SELECT manager_id FROM manager WHERE username = ?";
+                    } else {
+                        return null;  // If role is not 'employee' or 'manager', return null
+                    }
+                } else {
+                    return null;  // No matching username found
+                }
+            }
+
+            // Now that we have the correct SQL based on role, fetch the ID
+            if (idSql != null) {
+                try (PreparedStatement idStmt = conn.prepareStatement(idSql)) {
+                    idStmt.setString(1, username);
+
+                    try (ResultSet idRs = idStmt.executeQuery()) {
+                        if (idRs.next()) {
+                            // Return the appropriate ID based on the role
+                            if (idSql.contains("employee_id")) {
+                                return idRs.getInt("employee_id");  // If the role is 'employee', return employee_id
+                            } else if (idSql.contains("manager_id")) {
+                                return idRs.getInt("manager_id");  // If the role is 'manager', return manager_id
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // You should log this in production with a logging framework like SLF4J or Log4j
+        }
+        
+        return null;  // Return null if no ID was found
+    }
+
+    
+    public Employee getEmployeeById(Integer id) {
+        String sql = "SELECT e.employee_id, e.username, e.name, e.gender, e.dob, e.email, e.phone_num, e.address, e.department, e.salary " +
+                     "FROM employee e " +
+                     "WHERE e.employee_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);  // Set the employee ID parameter
+
+            // Execute the query
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Create a new Employee object and populate it with data from the result set
+                    Employee employee = new Employee();
+                    employee.setEmployeeId(rs.getInt("employee_id"));
+                    employee.setUsername(rs.getString("username"));
+                    employee.setName(rs.getString("name"));
+                    employee.setGender(rs.getString("gender"));
+                    employee.setDob(rs.getDate("dob"));
+                    employee.setEmail(rs.getString("email"));
+                    employee.setphone_num(rs.getString("phone_num"));
+                    employee.setAddress(rs.getString("address"));
+                    employee.setDepartment(rs.getString("department"));
+                    employee.setSalary(rs.getDouble("salary"));
+
+                    return employee;  // Return the Employee object populated with data
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // You might want to log this in a production environment
+        }
+        
+        return null;  // Return null if no employee is found with the given ID
+    }
+
+
 }
