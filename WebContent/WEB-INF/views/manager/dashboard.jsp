@@ -70,19 +70,24 @@
 
                 <!-- Modal for Pending Submit Details -->
                 <div id="submit-detail-modal" class="modal">
-                    <div class="modal-content">
-                        <h3>Submit Item Details</h3>
-                        <p id="modal-type">Type: </p>
-                        <p id="modal-title">Title: </p>
-                        <p id="modal-submitted-by">Submitted By: </p>
-                        <p id="modal-date">Date: </p>
-                        <div class="modal-buttons">
-                            <button onclick="approveSubmit()">Approve</button>
-                            <button onclick="rejectSubmit()">Reject</button>
-                        </div>
-                        <button class="close-btn" onclick="closeModal()">Close</button>
-                    </div>
-                </div>
+				    <div class="modal-content">
+				    <span class="close-btn" id="closeSubmitModalBtn">&times;</span>
+				        <h3>Chi tiết</h3>
+				     
+				        <p id="modal-type"></p>
+				        <p id="modal-title"></p>
+				        <p id="modal-submitted-by"></p>
+				        <p id="modal-date"></p>
+				        <p id="modal-description"></p>
+				        <!-- This is the new file path container -->
+				        <p id="modal-file-path" style="display: none;"></p>
+				        <div class="modal-buttons">
+				            <button id="approveBtn" class="submitBtn">Phê duyệt</button>
+				            <button id="rejectBtn" class="submitBtn">Từ chối</button>
+				        </div>
+
+				    </div>
+				</div>
             </div>
         </div>
     </div>
