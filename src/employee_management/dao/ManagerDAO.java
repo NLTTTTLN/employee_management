@@ -132,6 +132,36 @@ public class ManagerDAO {
         }
         return items;
     }
+    // Handle approval or rejection of an item
+    public boolean handleApproval(Integer itemId, String itemType, String status) {
+        String sql = "";
+        if ("Report".equalsIgnoreCase(itemType)) {
+            // Update status for reports
+            sql = "UPDATE Reports SET status = ? WHERE id = ?";
+        } else if ("Absence Request".equalsIgnoreCase(itemType)) {
+            // Update status for absence requests
+            sql = "UPDATE AbsenceRequests SET status = ? WHERE id = ?";
+        }
+
+        try (Connection conn = getConnection(); 
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set the parameters for the SQL query
+            stmt.setString(1, status);  // Set the new status (Approve/Reject)
+            stmt.setInt(2, itemId);     // Set the item ID
+            
+            // Execute the update
+            int rowsAffected = stmt.executeUpdate();
+
+            // If rowsAffected > 0, the update was successful
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     
  // Fetch Report details
     public EmployeeSubmitItem getReportDetail(Integer itemId) {
