@@ -156,5 +156,31 @@ CREATE TABLE AbsenceRequests (
     status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-- Inserting 10 realistic Reports with file paths (correct column order)
+INSERT INTO Reports (title, description, file_path, employee_id, manager_id, status)
+VALUES
+('Báo cáo công việc tuần 1: Khởi động dự án mới', 'Mô tả các công việc đã hoàn thành trong tuần 1 của dự án khởi động, bao gồm các cuộc họp ban đầu và phân công công việc.', '/uploads/reports/week1_project_launch.pdf', 1, 2, 'Pending'),
+('Báo cáo công việc tuần 2: Phát triển phần mềm', 'Tóm tắt tiến độ phát triển phần mềm, bao gồm việc hoàn thành chức năng đăng nhập và cơ sở dữ liệu người dùng.', '/uploads/reports/week2_software_development.pdf', 2, 3, 'Pending'),
+('Báo cáo công việc tuần 3: Xây dựng giao diện người dùng', 'Các hoạt động thiết kế và triển khai giao diện người dùng cho ứng dụng. Đảm bảo giao diện phù hợp với yêu cầu của khách hàng.', '/uploads/reports/week3_ui_design.pdf', 3, 1, 'Pending'),
+('Báo cáo công việc tuần 4: Tối ưu hóa hiệu suất hệ thống', 'Đánh giá và tối ưu hóa các điểm nghẽn về hiệu suất của hệ thống, bao gồm cả việc cải thiện thời gian phản hồi của ứng dụng.', '/uploads/reports/week4_performance_optimization.pdf', 4, 2, 'Pending'),
+('Báo cáo công việc tuần 5: Kiểm thử và phát hành', 'Tổng quan về quá trình kiểm thử phần mềm và việc chuẩn bị phát hành sản phẩm. Bao gồm cả các lỗi được phát hiện và các cải tiến được thực hiện.', '/uploads/reports/week5_testing_and_release.pdf', 5, 3, 'Pending'),
+('Báo cáo công việc tuần 6: Hỗ trợ khách hàng', 'Tổng hợp các yêu cầu và phản hồi của khách hàng trong tuần qua. Đánh giá sự hài lòng và các vấn đề còn tồn đọng cần giải quyết.', '/uploads/reports/week6_customer_support.pdf', 6, 1, 'Pending'),
+('Báo cáo công việc tuần 7: Cập nhật và bảo trì hệ thống', 'Cập nhật phần mềm và bảo trì hệ thống, bao gồm việc triển khai bản vá bảo mật và kiểm tra tính tương thích của hệ thống với các phiên bản mới.', '/uploads/reports/week7_system_update_maintenance.pdf', 7, 2, 'Pending'),
+('Báo cáo công việc tuần 8: Đào tạo nhân viên', 'Tổng kết các buổi đào tạo và hướng dẫn cho nhân viên mới về quy trình công việc và công cụ phần mềm.', '/uploads/reports/week8_employee_training.pdf', 8, 3, 'Pending'),
+('Báo cáo công việc tuần 9: Quản lý dự án và báo cáo tiến độ', 'Báo cáo về tiến độ thực hiện dự án, các mốc quan trọng đã hoàn thành và kế hoạch cho các tuần tiếp theo.', '/uploads/reports/week9_project_management_progress.pdf', 9, 1, 'Pending'),
+('Báo cáo công việc tuần 10: Phân tích dữ liệu và báo cáo kết quả', 'Phân tích dữ liệu thu thập được từ các cuộc khảo sát nội bộ, báo cáo kết quả và đề xuất cải tiến cho quy trình làm việc.', '/uploads/reports/week10_data_analysis_results.pdf', 10, 2, 'Pending');
 
+-- Inserting 10 realistic Absence Requests
+INSERT INTO AbsenceRequests (title, description, employee_id, manager_id, status)
+VALUES
+('Đơn xin nghỉ phép ốm', 'Tôi bị sốt và đau họng, cần nghỉ ngơi để hồi phục sức khỏe. Dự kiến nghỉ 3 ngày từ 1/10 đến 3/10.', 1, 2, 'Pending'),
+('Đơn xin nghỉ phép thăm gia đình', 'Lý do: Cần về thăm gia đình và hỗ trợ việc cưới của em gái. Dự kiến nghỉ 2 ngày từ 5/10 đến 6/10.', 2, 3, 'Pending'),
+('Đơn xin nghỉ phép vì lý do cá nhân', 'Tôi có việc cần phải giải quyết cá nhân, không thể đi làm vào ngày 10/10. Mong được duyệt nghỉ.', 3, 1, 'Pending'),
+('Đơn xin nghỉ phép để chăm sóc con nhỏ', 'Con tôi bị bệnh nên tôi cần nghỉ phép để chăm sóc. Dự kiến nghỉ 3 ngày từ 8/10 đến 10/10.', 4, 2, 'Pending'),
+('Đơn xin nghỉ phép mừng cưới', 'Lý do nghỉ: Tôi sẽ tổ chức đám cưới vào ngày 12/10, xin nghỉ phép 2 ngày để chuẩn bị và tham dự sự kiện.', 5, 3, 'Pending'),
+('Đơn xin nghỉ phép thăm gia đình', 'Tôi cần về quê thăm ông bà ốm. Dự kiến nghỉ phép 1 ngày vào 15/10.', 6, 1, 'Pending'),
+('Đơn xin nghỉ phép thăm bà con', 'Tôi cần nghỉ phép để tham gia đám tang của bà con trong gia đình. Xin nghỉ 2 ngày từ 18/10 đến 19/10.', 7, 2, 'Pending'),
+('Đơn xin nghỉ phép vì lý do cá nhân', 'Lý do nghỉ: Tôi cần nghỉ để đi khám sức khỏe định kỳ vào ngày 20/10. Dự kiến nghỉ 1 ngày.', 8, 3, 'Pending'),
+('Đơn xin nghỉ phép đi du lịch', 'Xin nghỉ phép 3 ngày từ 22/10 đến 24/10 để đi du lịch cùng gia đình. Mong được duyệt.', 9, 1, 'Pending'),
+('Đơn xin nghỉ phép để học lớp đào tạo', 'Lý do nghỉ: Tôi tham gia lớp đào tạo nâng cao kỹ năng nghề nghiệp, xin nghỉ 2 ngày từ 25/10 đến 26/10.', 10, 2, 'Pending');
 
