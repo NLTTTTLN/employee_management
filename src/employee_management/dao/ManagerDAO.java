@@ -136,7 +136,7 @@ public class ManagerDAO {
  // Fetch Report details
     public EmployeeSubmitItem getReportDetail(Integer itemId) {
         String query = """
-            SELECT r.id, r.title, r.description, r.filePath, e.name AS submittedBy, r.created_at
+            SELECT r.id, r.title, r.description, r.file_path, e.name AS submittedBy, r.created_at
             FROM Reports r
             JOIN Employee e ON r.employee_id = e.employee_id
             WHERE r.id = ?;
@@ -154,7 +154,7 @@ public class ManagerDAO {
                     report.setType("Report");  // Set type as "Report"
                     report.setTitle(rs.getString("title"));
                     report.setDescription(rs.getString("description"));
-                    report.setFilePath(rs.getString("filePath"));
+                    report.setFilePath(rs.getString("file_path"));
                     report.setSubmittedBy(rs.getString("submittedBy"));
 
                     // Convert timestamp to a readable date format
