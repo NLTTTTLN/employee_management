@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmEditBtn = document.getElementById('confirmEditBtn');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 	const closeSubmitModalBtn = document.getElementById('closeSubmitModalBtn');
+	const approveSubmitBtn = document.getElementById('approveBtn');
+	const rejectSubmitBtn = document.getElementById('rejectBtn');
     // SIDEBAR SCRIPT
     window.toggleSidebar = function() {
         if (sidebar) {
@@ -95,44 +97,62 @@ document.addEventListener('DOMContentLoaded', function() {
 	    // Send a GET request with query parameters
 	    fetch(apiUrl)
 	        .then(response => {
-	            // Check if the response is not ok
 	            if (!response.ok) {
 	                throw new Error('Network response was not ok');
 	            }
 	            return response.json(); // Parse the JSON if successful
 	        })
 	        .then(data => {
-				
 	            // Populate modal content with data
 	            document.getElementById('modal-title').textContent = `Tiêu đề: ${data.title}`;
 	            document.getElementById('modal-submitted-by').textContent = `Gửi bởi: ${data.submittedBy}`;
 	            document.getElementById('modal-date').textContent = `Ngày: ${data.date}`;
 	            document.getElementById('modal-type').textContent = `Loại: ${data.type}`;
 	            document.getElementById('modal-description').textContent = `Mô tả: ${data.description}`;
-				console.log("Fetched Data:", data);
+
 	            // Conditionally show/hide file path based on itemType
 	            const filePathContainer = document.getElementById('modal-file-path');
-				// Check if the filePath exists and then extract the file name
-				if (itemType === 'Report' && data.filePath) {
-				    // Extract the file name from the file path
-				    const fileName = data.filePath.split('/').pop();  // This gets the last part of the URL path
+	            if (itemType === 'Report' && data.filePath) {
+	                const fileName = data.filePath.split('/').pop();  // This gets the last part of the URL path
+	                filePathContainer.innerHTML = `<p><strong>File đính kèm:</strong> <a href="#" id="download-link">${fileName}</a></p>`;
+	                filePathContainer.style.display = 'block';
 
-				    // Update the file path container with the file name
-				    filePathContainer.innerHTML = `<p><strong>File đính kèm:</strong> <a href="${data.filePath}" target="_blank">${fileName}</a></p>`;
-				    filePathContainer.style.display = 'block';  // Make sure the file path is visible
-				} else {
-				    filePathContainer.style.display = 'none';  // Hide the file path section if no file exists
-				}
+	                // Add event listener for file download
+	                document.getElementById('download-link').addEventListener('click', function(event) {
+	                    event.preventDefault(); // Prevent default action
+	                    // Now, construct the full URL with the correct file extension
+	                    const downloadUrl = `/employee_management/manager/download/${fileName}`;  
+	                    console.log("Downloading file from URL: " + downloadUrl);  // Log the download URL
+	                    window.location.href = downloadUrl;  // Redirect to the file URL, triggering the download
+	                });
+	            } else {
+	                filePathContainer.style.display = 'none';
+	            }
 
-
-	            // Store item ID in the modal to use in the approval/rejection actions
+	            // Store item ID and type in the modal
 	            document.getElementById('submit-detail-modal').setAttribute('data-item-id', itemId);
-	            document.getElementById('submit-detail-modal').style.display = 'block'; // Show the modal
+	            document.getElementById('submit-detail-modal').setAttribute('data-item-type', itemType);
+
+	            // Show the modal
+	            document.getElementById('submit-detail-modal').style.display = 'block';
 	        })
 	        .catch(error => console.error('Error fetching submit item details:', error));
 	}
 
 
+
+
+
+	if (approveSubmitBtn) {
+		       approveSubmitBtn.onclick = function() {
+		           handleApproval('Approve');
+		       };
+		   }
+	if (rejectSubmitBtn) {
+		   		rejectSubmitBtn.onclick = function() {
+		   		   handleApproval('Reject');
+		   		};
+		   }
 	// Function to close the modal
 	if (closeSubmitModalBtn) {
 	       closeSubmitModalBtn.onclick = function() {
@@ -145,22 +165,40 @@ document.addEventListener('DOMContentLoaded', function() {
 	        document.getElementById('submit-detail-modal').style.display = 'none';
 	   }
 
-	// Function to handle approval/rejection actions
-	function handleApproval(action) {
-	    const reportId = document.getElementById('modal').getAttribute('data-report-id');
-	    fetch(`/manager/handleApproval/${reportId}`, {
-	        method: 'POST',
-	        body: JSON.stringify({ status: action }),
-	        headers: { 'Content-Type': 'application/json' }
-	    })
-	    .then(response => response.json())
-	    .then(data => {
-	        alert(`Report ${action.toLowerCase()} successfully.`);
-	        closeModal(); // Close modal after action
-	        location.reload(); // Refresh the page to show updated status
-	    })
-	    .catch(error => console.error('Error handling approval/rejection:', error));
-	}
+	   // Function to handle approval/rejection actions
+	   function handleApproval(action) {
+	       const itemId = document.getElementById('submit-detail-modal').getAttribute('data-item-id');
+	       const itemType = document.getElementById('submit-detail-modal').getAttribute('data-item-type');
+
+	       if (!itemId || !itemType) {
+	           console.error('Error: itemId or itemType is missing.');
+	           return;
+	       }
+
+	       console.log(`Item ID: ${itemId}, Item Type: ${itemType}, Action: ${action}`);
+
+	       // Make the API request to handle the approval/rejection
+	       fetch(`/employee_management/manager/handleApproval?itemId=${encodeURIComponent(itemId)}&itemType=${encodeURIComponent(itemType)}&action=${encodeURIComponent(action)}`, {
+	           method: 'POST',
+	           headers: {
+	               'Content-Type': 'application/json'
+	           },
+	           body: JSON.stringify({ action }) // Send item type and action status
+	       })
+	       .then(response => response.json())
+	       .then(data => {
+	           if (data.success) {
+	               alert(`Item ${action.toLowerCase()} successfully.`);
+	               closeSubmitDetailModal(); // Close modal after action
+	               location.reload(); // Refresh the page to show updated status
+	           } else {
+	               alert('Error: ' + data.message);
+	           }
+	       })
+	       .catch(error => console.error('Error handling approval/rejection:', error));
+	   }
+
+
 
 
     function fetchEmployee() {
