@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmSelectBtn = document.getElementById('confirmSelectBtn');
     const confirmEditBtn = document.getElementById('confirmEditBtn');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+	const closeSubmitModalBtn = document.getElementById('closeSubmitModalBtn');
     // SIDEBAR SCRIPT
     window.toggleSidebar = function() {
         if (sidebar) {
@@ -46,6 +47,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	            data.pendingItems.forEach(item => {
 	                const row = document.createElement('tr');
 	                row.classList.add('pending-item');
+					
+					// Set data-id and data-type attributes on each row
+					    row.setAttribute('data-id', item.id);  // Set item ID
+					    row.setAttribute('data-type', item.type);
 
 	                const typeCell = document.createElement('td');
 	                typeCell.textContent = item.type;
@@ -97,26 +102,48 @@ document.addEventListener('DOMContentLoaded', function() {
 	            return response.json(); // Parse the JSON if successful
 	        })
 	        .then(data => {
+				
 	            // Populate modal content with data
-	            document.getElementById('modal-title').textContent = data.title;
-	            document.getElementById('modalBody').innerHTML = `
-	                <p><strong>Type:</strong> ${data.type}</p>
-	                <p><strong>Description:</strong> ${data.description}</p>
-	                <p><strong>Submitted By:</strong> ${data.submittedBy}</p>
-	                <p><strong>Date:</strong> ${data.date}</p>
-	            `;
+	            document.getElementById('modal-title').textContent = `Tiêu đề: ${data.title}`;
+	            document.getElementById('modal-submitted-by').textContent = `Gửi bởi: ${data.submittedBy}`;
+	            document.getElementById('modal-date').textContent = `Ngày: ${data.date}`;
+	            document.getElementById('modal-type').textContent = `Loại: ${data.type}`;
+	            document.getElementById('modal-description').textContent = `Mô tả: ${data.description}`;
+				console.log("Fetched Data:", data);
+	            // Conditionally show/hide file path based on itemType
+	            const filePathContainer = document.getElementById('modal-file-path');
+				// Check if the filePath exists and then extract the file name
+				if (itemType === 'Report' && data.filePath) {
+				    // Extract the file name from the file path
+				    const fileName = data.filePath.split('/').pop();  // This gets the last part of the URL path
+
+				    // Update the file path container with the file name
+				    filePathContainer.innerHTML = `<p><strong>File đính kèm:</strong> <a href="${data.filePath}" target="_blank">${fileName}</a></p>`;
+				    filePathContainer.style.display = 'block';  // Make sure the file path is visible
+				} else {
+				    filePathContainer.style.display = 'none';  // Hide the file path section if no file exists
+				}
+
+
 	            // Store item ID in the modal to use in the approval/rejection actions
-	            document.getElementById('modal').setAttribute('data-item-id', itemId);
-	            document.getElementById('modal').style.display = 'block'; // Show the modal
+	            document.getElementById('submit-detail-modal').setAttribute('data-item-id', itemId);
+	            document.getElementById('submit-detail-modal').style.display = 'block'; // Show the modal
 	        })
 	        .catch(error => console.error('Error fetching submit item details:', error));
 	}
 
 
 	// Function to close the modal
-	function closeSubmitDetailModal() {
-	    document.getElementById('modal').style.display = 'none';
-	}
+	if (closeSubmitModalBtn) {
+	       closeSubmitModalBtn.onclick = function() {
+	           closeSubmitDetailModal();
+	       };
+	   }
+
+	   function closeSubmitDetailModal() {
+		console.log("Closing...");
+	        document.getElementById('submit-detail-modal').style.display = 'none';
+	   }
 
 	// Function to handle approval/rejection actions
 	function handleApproval(action) {
