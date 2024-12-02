@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import employee_management.bean.Account;
+import employee_management.bean.Employee;
 import employee_management.dao.AccountDAO;
 
 @Service
@@ -63,5 +64,13 @@ public class AccountService {
     // Promote an employee to a manager
     public void promoteToManager(String username) {
         accountDAO.promoteToManager(username);
+    }
+    
+    public int getUserId(String username) {
+    	return  accountDAO.getAccountId(username);
+    }
+    
+    public Employee getEmployeeById(Integer id) {
+    	return accountDAO.getEmployeeById(id);
     }
 }
