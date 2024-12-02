@@ -62,7 +62,20 @@ public class ManagerService {
         }
         return null;  // If invalid type, return null or handle accordingly
     }
-
+    
+    public boolean handleApproval(Integer itemId, String itemType, String action) {
+        try {
+            // Determine the status based on action
+            String status = "Approve".equalsIgnoreCase(action) ? "Approved" : "Rejected";
+            
+            // Pass the status to DAO layer
+            return managerDAO.handleApproval(itemId, itemType, status);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+       
     // Fetch all employees
     public List<Employee> getAllEmployees() {
         return managerDAO.getAllEmployees();
@@ -82,7 +95,9 @@ public class ManagerService {
     
     public Employee getEmployeeByUsername(String username) {
         return managerDAO.getEmployeeByUsername(username); // Call the DAO to fetch the employee by ID
-    }public boolean editEmployee(String username, String name, String gender, String dob, String email, String phone_num, String address, String department, double salary) {
+    }
+    
+    public boolean editEmployee(String username, String name, String gender, String dob, String email, String phone_num, String address, String department, double salary) {
         try {
             java.sql.Date dateOfBirth = java.sql.Date.valueOf(dob);
 
