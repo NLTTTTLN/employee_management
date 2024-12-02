@@ -1,27 +1,31 @@
 package employee_management.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import employee_management.bean.Account;
 import employee_management.bean.Employee;
 import employee_management.bean.EmployeeSubmitItem;
 import employee_management.service.ManagerService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/manager")
@@ -29,7 +33,29 @@ public class ManagerController {
 
 	@Autowired
 	private ManagerService managerService;
+	
 
+	@RequestMapping(value = "/download/{fileName:.+}", method = RequestMethod.GET)
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response,
+							@PathVariable String fileName) {
+		String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/uploads/reports");
+		Path file = Paths.get(dataDirectory,fileName);
+		if (Files.exists(file)) {
+			response.setContentType("application//pdf");
+			response.addHeader("Content-Disposition", "attachment; filename="+fileName);
+			try
+			{
+				Files.copy(file, response.getOutputStream());
+				response.getOutputStream().flush();
+			}
+			catch(IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+
+    
 	// GET /home cho trang chính của admin
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public String showManagerHomePage() {
@@ -66,12 +92,37 @@ public class ManagerController {
 	
 	@RequestMapping(value = "/submit-detail", method = RequestMethod.GET)
 	@ResponseBody
-	public EmployeeSubmitItem getSubmitDetail(@RequestParam("itemId") Integer itemId, @RequestParam("itemType") String itemType) {
+	public EmployeeSubmitItem getSubmitDetail(@RequestParam("itemId") Integer itemId, 
+											@RequestParam("itemType") String itemType) {
 		System.out.println("Searching submit item with id: " + itemId + ", type:" + itemType);
 		EmployeeSubmitItem item = managerService.getSubmitItemDetail(itemId, itemType);
 		System.out.println("Found Submit Item: " + item);
 	    return item; // Return the employee as JSON
 	}
+	@RequestMapping(value = "/handleApproval", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> handleApproval(@RequestParam Integer itemId,
+	                                          @RequestParam String itemType,
+	                                          @RequestParam String action) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        boolean success = managerService.handleApproval(itemId, itemType, action);
+
+	        if (success) {
+	            response.put("success", true);
+	            response.put("message", "Item " + action.toLowerCase() + " successfully.");
+	        } else {
+	            response.put("failed", false);
+	            response.put("message", "Failed to update the item's status.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("failed", false);
+	        response.put("message", "Error occurred while updating the item's status.");
+	    }
+	    return response;
+	}
+
 
 	@RequestMapping(value = "/management", method = RequestMethod.GET)
 	public String showManagerManagementPage(Model model) {
