@@ -52,7 +52,7 @@ public class LoginController {
 	        } else if ("manager".equals(account.getRole())) {
 	            response.put("redirectUrl", "manager/dashboard");
 	        } else {
-	            response.put("redirectUrl", "/user/home");
+	        	response.put("redirectUrl", "employee/dashboard?id="+ accountService.getUserId(username));
 	        }
 	    } else {
 	        response.put("success", false); // Authenticate thất bại
