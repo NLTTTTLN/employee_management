@@ -187,6 +187,7 @@ p{
 
 .dashboard {
   padding: 20px;
+  position: relative;
 }
 
 /* Container for the dashboard header */
@@ -264,10 +265,34 @@ p{
         margin-bottom: 10px;
     }
 }
+.dashboard .table-section {
+    margin-top: 20px;
+    max-height: 400px; /* Limit the height of the table container */
+    overflow-y: auto; /* Add vertical scroll if content overflows */
+}
+
+.dashboard .table-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+.dashboard .table-box {
+    width: 100%; /* Adjust width as needed */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+}
+.dashboard .scrollable-table {
+    max-height: 300px; /* Set the maximum height for scroll */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    
+    
+}
  .dashboard table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            
         }
 .dashboard th,td {
             padding: 8px;
@@ -283,9 +308,18 @@ p{
             background-color: #f4f4f4;
             font-weight: 600;
             position: sticky;
-    		top: 0; /* Stick to the top when scrolling */
-   			z-index: 2; /* Ensure the header stays above the table content */
+ 
         }
+.dashboard table thead tr {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	color: white;
+    background-color:  #d32f2f;
+    font-weight: 600;
+    position: sticky;
+    top: -0.1; /* Stick to the top when scrolling */
+    z-index: 1; /* Ensure the header stays above the table content */ /* Optional: to make it look cleaner when sticky */
+}
 .dashboard .employee-count, .pending-absence, .pending-report {
   padding: 10px;
   border-radius: 5px;
@@ -314,7 +348,6 @@ p{
 .dashboard thead {
     background-color: #f2f2f2;
     position: sticky;
-    top: 0;
     z-index: 1;  /* Keeps the header on top when scrolling */
 }
 .dashboard .pending-item td{
@@ -893,7 +926,283 @@ p{
 		    margin-bottom: 15px;
 		    text-align: left;
 		}
+	
+	
+		.dashboard .action-btn {
+			font-family: Poppins, sans-serif;
+		    padding: 10px 20px;
+		    margin: 5px;
+		    margin-bottom: 10px;
+		    background-color: #d32f2f;
+		    color: white;
+		    border: none;
+		    cursor: pointer;
+		    border-radius: 4px;
+		    transition: all 0.3s ease;
+		}
+		
+		.dashboard .action-btn:hover {
+		    background-color: #b71c1c;
+		}
+		
+/* Left column for update options */
+.update-option-container {
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Space between buttons */
+    font-family: Poppins, sans-serif;
+}
+
+.update-option-container button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.update-option-container button:hover {
+    background-color: #e0e0e0;
+}
+		
+		
+
+		
+		
+/* Profile box */
+/* Profile box */
+.profile {
+	border-left: 10px solid #d32f2f;
+    background-color: #ffffff;
+    width:65%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-right:50px;
+    font-family: Poppins, sans-serif;
+    overflow-y: auto;
+    background-color:#f0f0f0;
+
+}
+
+.profile h2 {
+    margin-bottom: 20px;
+}
+
+.profile form {
+   	display: flex; /* Use Flexbox */
+    flex-direction: column; /* Stack children vertically */
+    width: 60%; /* Ensure the form takes the full width of .profile */
+    max-width: 500px; /* Set a max-width for the form */
+    margin: 20px auto; /* Center the form horizontally within its parent */
+    text-align: left; /* Ensure the text inside form fields aligns left */
+    padding: 20px; /* Optional padding inside the form */
+    padding-left: 150px;
+
+}
+
+.profile form div {
+    display: flex; /* Flexbox to make items inline */
+    justify-content: space-between; /* Space between label and input */
+    margin-bottom: 20px;
+    align-items: center; /* Vertically center label and input */
+}
+
+.profile form label {
+    font-weight: bold;
+    
+}
+
+.profile form input {
+	font-family: Poppins, sans-serif;
+	font-weight:300;
+    padding: 12px; /* Increase padding inside the input box */
+    font-size: 16px; /* Increase font size for better readability */
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 70%; /* Ensure input fields take full width of their container */
+    max-width: 400px; /* Limit the maximum width if needed */
+    box-sizing: border-box; /* Ensure padding does not affect width calculation */
+}
+
+.profile form button {
+	font-family: Poppins, sans-serif;
+	font-weight:600;
+	background-color: #d32f2f;
+	color: white;
+	align-self: flex-end;
+	width:25%;
+    margin-top: 20px;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile form button:hover {
+    background-color: #b71c1c;
+		
+}
+
+.content .main-profile-content {
+	font-family: Poppins, sans-serif;
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    gap: 20px; /* Space between the left and right sections */
+}
+/* To create the two columns */
+.content .main-content-container {
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	font-family: Poppins, sans-serif;
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    gap: 20px; /* Space between the left and right sections */
+}
+.content .main-content {
+	font-family: Poppins, sans-serif;
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    gap: 20px; /* Space between the left and right sections */
+}
+.content .main-profile-content {
+	display:flex;
+	font-family: Poppins, sans-serif;
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    gap: 20px; /* Space between the left and right sections */
+}
+/* Left column for update options */
+.update-option-container { 
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-left: 10px solid #d32f2f;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+
+    
+    /* New adjustments */
+    width: 250px !important; /* Set a fixed width to make it smaller */
+    height: 150px; /* Allow height to adjust based on content */
+    display: flex; /* Use flexbox for centering content */
+    flex-direction: column; /* Align items vertically */
+    justify-content: center; /* Vertically center items */
+    align-items: center; /* Horizontally center items */
+    margin: 20px auto; /* Center the container horizontally in its parent */
+	margin-left:100px;
+	margin-right:50px;
+}
+/* Buttons inside the update-option-container */
+.update-option-container button { 
+	    font-family: Poppins, sans-serif;
+	    font-weight:600;
+	    display: block;
+    width: 100%; /* Take full width of the container */
+    padding: 12px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center; /* Center text in buttons */
+    color: #d32f2f;
+    transition: all 0.3s ease;
+}
+
+.update-option-container button:hover { 
+    background-color: #e0e0e0;
+}
 
 
+.changePassword {
+	display:none;
+	border-left: 10px solid #d32f2f;
+    background-color: #ffffff;
+    width:65%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-right: 50px;
+    font-family: Poppins, sans-serif;
+    overflow-y: auto;
+    background-color:#f0f0f0;
+    
 
+}
+
+.changePassword h2 {
+    margin-bottom: 20px;
+}
+
+.changePassword .input-form {
+   	display: flex; /* Use Flexbox */
+    flex-direction: column; /* Stack children vertically */
+    width: 80%; /* Ensure the form takes the full width of .profile */
+    max-width: 500px; /* Set a max-width for the form */
+    margin: 20px auto; /* Center the form horizontally within its parent */
+    text-align: left; /* Ensure the text inside form fields aligns left */
+    padding: 20px; /* Optional padding inside the form */
+    padding-left: 150px;
+
+}
+
+.changePassword .input-form div {
+    display: flex; /* Flexbox to make items inline */
+    justify-content: space-between; /* Space between label and input */
+    margin-bottom: 20px;
+    align-items: center; /* Vertically center label and input */
+}
+
+.changePassword .input-form label {
+    font-weight: bold;
+    
+}
+
+.changePassword .input-form input {
+	font-family: Poppins, sans-serif;
+	font-weight:300;
+    padding: 12px; /* Increase padding inside the input box */
+    font-size: 16px; /* Increase font size for better readability */
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 70%; /* Ensure input fields take full width of their container */
+    max-width: 400px; /* Limit the maximum width if needed */
+    box-sizing: border-box; /* Ensure padding does not affect width calculation */
+}
+
+.changePassword .input-form button {
+	font-family: Poppins, sans-serif;
+	font-weight:600;
+	background-color: #d32f2f;
+	color: white;
+	align-self: flex-end;
+	width:25%;
+    margin-top: 20px;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.changePassword .input-form button:hover {
+    background-color: #b71c1c;
+		
+}
 
