@@ -26,11 +26,11 @@ public class Employee extends User {
         this.salary = salary;
     }
     
-    public int getEmployeeId() {
+    public Integer getEmployeeId() {
         return employee_id;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employee_id = employeeId;
     }
 
