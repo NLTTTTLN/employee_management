@@ -138,6 +138,7 @@ public class ManagerController {
 
 		Map<String, Object> employeeFullData = new HashMap<>();
 		employeeFullData.put("employeeData", employeeData);
+		System.out.println("EmployeeFullData:" + employeeFullData);
 		return employeeFullData;
 	}
 
