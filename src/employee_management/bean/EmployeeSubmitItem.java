@@ -7,6 +7,7 @@ public class EmployeeSubmitItem {
     private String description;
     private String filePath;
     private String submittedBy;
+    private String status;
     private String date;
     
 	public EmployeeSubmitItem() {
@@ -44,6 +45,7 @@ public class EmployeeSubmitItem {
 		this.submittedBy = submittedBy;
 		this.date = date;
 	}
+	
     
     // Getters and Setters
     
@@ -57,6 +59,14 @@ public class EmployeeSubmitItem {
 	public int getId() {
 		return id;
 	}
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
