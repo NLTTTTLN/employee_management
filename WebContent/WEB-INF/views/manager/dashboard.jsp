@@ -50,21 +50,27 @@
                     </div>
                 
                     <!-- Table Section -->
-                    <div class="table-section">
-                    	<h3>Danh sách chờ duyệt</h3>
-                        <table id="pending-table">
-                            <thead>
-                                <tr>
-                                    <th>Loại</th>
-                                    <th>Tiêu đề</th>
-                                    <th>Người gửi</th>
-                                    <th>Ngày gửi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Rows will be dynamically inserted here by JavaScript -->
-                            </tbody>
-                        </table>
+                    <div class="table-container">
+	                    
+	                    <div class="table-box">
+	                    	<h3>Danh sách chờ duyệt</h3>
+	                    	<div class="scrollable-table">
+	                    	
+	                        <table id="pending-table">
+	                            <thead>
+	                                <tr>
+	                                    <th>Loại</th>
+	                                    <th>Tiêu đề</th>
+	                                    <th>Người gửi</th>
+	                                    <th>Ngày gửi</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                <!-- Rows will be dynamically inserted here by JavaScript -->
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                    </div>
                     </div>
                 </div>
 
