@@ -50,6 +50,9 @@ public class LoginController {
 	        if ("admin".equals(account.getRole())) {
 	            response.put("redirectUrl", "admin/dashboard");
 	        } else if ("manager".equals(account.getRole())) {
+	        	 int managerId = accountService.getUserId(username);  // Retrieve the manager_id
+	             session.setAttribute("manager_id", managerId);  // Set manager_id in session
+	             response.put("manager_id", managerId);
 	            response.put("redirectUrl", "manager/dashboard");
 	        } else {
 	        	response.put("redirectUrl", "employee/dashboard?id="+ accountService.getUserId(username));
