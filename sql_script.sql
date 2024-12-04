@@ -7,7 +7,7 @@ USE employee_management;
 CREATE TABLE account (
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
-    role ENUM('a0', 'manager', 'employee') NOT NULL
+    role ENUM('admin', 'manager', 'employee') NOT NULL
 );
 
 -- Create the employee table
