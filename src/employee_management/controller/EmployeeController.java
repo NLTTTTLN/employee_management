@@ -132,10 +132,7 @@ public class EmployeeController{
 	        model.addAttribute("employee", employeeProfile);
 	        System.out.println("Employee ID:"+employeeId);
 	        System.out.println("Employee Profile:"+employeeProfile );
-	    } else {
-	        // If the employee ID is not found, redirect to the login page
-	        return "redirect:/login";
-	    }
+	    } 
 	    return "employee/profile";
 	}
 	
@@ -200,6 +197,62 @@ public class EmployeeController{
 
 	    return response;
 	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody  // This annotation will return the result as JSON
+	public Map<String, Object> updateEmployee(@RequestParam String username,
+	                                        @RequestParam String name,
+	                                        @RequestParam String gender,
+	                                        @RequestParam String dob,
+	                                        @RequestParam String email,
+	                                        @RequestParam String phone_num,
+	                                        @RequestParam String address) {
 
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        boolean success = employeeService.updateEmployee(username, name, gender, dob, email, phone_num, address);
+
+	        if (success) {
+	            response.put("success", true);
+	            response.put("message", "Employee updated successfully.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "Failed to update employee.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "Error while updating employee.");
+	    }
+	    return response;
+	}
+	
+	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
+	@ResponseBody  // This annotation will return the result as JSON
+	public Map<String, Object> changeEmployeePassword(@RequestParam String username,
+											@RequestParam String oldPassword,
+	                                        @RequestParam String newPassword
+	                                     ) {
+
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	    	System.out.println("Receiving username:" + username +", old password:" + oldPassword + ", newPassword: " + newPassword);
+	        boolean success = employeeService.changeEmployeePassword(username, oldPassword, newPassword);
+
+	        if (success) {
+	            response.put("success", true);
+	            response.put("message", "Employee updated successfully.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "Failed to update employee.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "Error while updating employee.");
+	    }
+	    System.out.println("Respone change password:" + response);
+	    return response;
+	}
 		
 }
