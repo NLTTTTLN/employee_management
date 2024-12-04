@@ -54,4 +54,14 @@ public class EmployeeService {
             return false;
         }
     }
+    
+    public boolean createSubmitItem(EmployeeSubmitItem item) {
+        try {
+            employeeDAO.saveSubmitItem(item);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
