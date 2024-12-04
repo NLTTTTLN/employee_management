@@ -257,7 +257,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	   // Choose to create a Report
 	   createReportBtn.addEventListener('click', function() {
 	       itemTypeInput.value = "Report";
-	       document.getElementById("modal-title").textContent = "Tạo Báo cáo";
+	       document.getElementById("modal-title").textContent = "Tạo báo cáo";
+		   document.getElementById("file-upload-container").style.display = "block";
 	       chooseTypeModal.style.display = 'none';
 	       createItemModal.style.display = 'block';
 	   });
@@ -265,7 +266,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	   // Choose to create an Absence Request
 	   createAbsenceBtn.addEventListener('click', function() {
 	       itemTypeInput.value = "Absence Request";
-	       document.getElementById("modal-title").textContent = "Yêu cầu Vắng Mặt";
+	       document.getElementById("modal-title").textContent = "Tạo đơn xin vắng mặt";
+		   document.getElementById("file-upload-container").style.display = "none";
 	       chooseTypeModal.style.display = 'none';
 	       createItemModal.style.display = 'block';
 	   });
@@ -279,21 +281,36 @@ document.addEventListener('DOMContentLoaded', function() {
 	   createItemForm.addEventListener('submit', function(event) {
 	       event.preventDefault();
 
-	       const itemTitle = itemTitleInput.value;
-	       const itemDescription = itemDescriptionInput.value;
-	       const itemType = itemTypeInput.value;
+	       const itemTitle = document.getElementById("itemTitle").value;
+	       const itemDescription = document.getElementById("itemDescription").value;
+	       const itemType = document.getElementById("itemType").value;
+		   const itemFile = document.getElementById("itemFile").files[0];
 
-	       // Send the data to the backend for creation
-	       fetch(`/employee_management/employee/create-item`, {
+	       // Create FormData object to send form data including file
+	       const formData = new FormData();
+		   
+	       formData.append("title", itemTitle);
+	       formData.append("description", itemDescription);
+		   formData.append("employee_id",employeeId);
+	       formData.append("type", itemType);
+
+	       // If it's a Report, append the file to the FormData
+	       if (itemType === "Report") {
+	           const itemFile = document.getElementById("itemFile").files[0]; // Get the file
+	           if (itemFile) {
+	               formData.append("file", itemFile); // Append the file to FormData
+	           } else {
+	               alert("Vui lòng chọn tệp để tải lên.");
+	               return; // Stop the form submission if no file is selected
+	           }
+	       }
+		   for (let pair of formData.entries()) {
+		           console.log(pair[0] + ': ' + pair[1]);
+		       }
+	       // Send the data to the backend using fetch
+	       fetch(`/employee_management/employee/create-item?title=${encodeURIComponent(itemTitle)}&description=${encodeURIComponent(itemDescription)}&employee_id=${encodeURIComponent(employeeId)}&type=${encodeURIComponent(itemType)}&itemFile=${encodeURIComponent(itemFile)}`, {
 	           method: 'POST',
-	           headers: {
-	               'Content-Type': 'application/json'
-	           },
-	           body: JSON.stringify({
-	               title: itemTitle,
-	               description: itemDescription,
-	               type: itemType
-	           })
+	           body: formData // Send FormData instead of JSON
 	       })
 	       .then(response => response.json())
 	       .then(data => {
@@ -302,6 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	               // Close the modal and reset the form
 	               createItemModal.style.display = 'none';
 	               createItemForm.reset();
+				   location.reload();
 	           } else {
 	               alert('Có lỗi khi tạo đơn.');
 	           }
@@ -310,5 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	           console.error('Error:', error);
 	       });
 	   });
+
     // Optionally, initialize to show the profile by default
 });
