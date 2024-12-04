@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Employee Dashboard</title>
+    <title>Employee Dashboard | ${employee.name}</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>"> <!-- Reusable CSS file -->
 </head>
 <body>
@@ -65,6 +65,35 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Modal 1: Choose Report or Absence Request -->
+                <div id="choose-type-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn" id="closeChooseModalBtn">&times;</span>
+                        <h3>Chọn loại đơn</h3>
+                        <p>Bạn muốn tạo:</p>
+                        <button id="createReportBtn">Báo cáo</button>
+                        <button id="createAbsenceBtn">Yêu cầu vắng mặt</button>
+                    </div>
+                </div>
+
+                <!-- Modal 2: Create Report or Absence Request -->
+                <div id="create-item-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn" id="closeCreateItemModalBtn">&times;</span>
+                        <h3 id="modal-title">Tạo Đơn</h3>
+                        <form id="createItemForm">
+                            <input type="hidden" id="itemType" value="" />
+                            <label for="itemTitle">Tiêu đề:</label>
+                            <input type="text" id="itemTitle" name="itemTitle" required /><br>
+
+                            <label for="itemDescription">Mô tả:</label>
+                            <textarea id="itemDescription" name="itemDescription" required></textarea><br>
+
+                            <button type="submit" class="submitBtn">Tạo</button>
+                        </form>
+                    </div>
+                </div>
 
                 <!-- Modal for Pending Submit Details -->
                 <div id="submit-detail-modal" class="modal">
@@ -74,14 +103,13 @@
 				     
 				        <p id="modal-type"></p>
 				        <p id="modal-title"></p>
-				        <p id="modal-submitted-by"></p>
 				        <p id="modal-date"></p>
 				        <p id="modal-description"></p>
 				        <!-- This is the new file path container -->
 				        <p id="modal-file-path" style="display: none;"></p>
 				        <div class="modal-buttons">
-				            <button id="approveBtn" class="submitBtn">Phê duyệt</button>
-				            <button id="rejectBtn" class="submitBtn">Từ chối</button>
+				            <button id="deleteSubmitBtn" class="submitBtn">Xóa</button>
+				            
 				        </div>
 
 				    </div>
