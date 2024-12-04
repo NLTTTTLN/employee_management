@@ -1,6 +1,7 @@
 package employee_management.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -120,17 +121,54 @@ public class AccountDAO {
     // Add a user
     public void addUser(String username, String password, String role) {
         String sql = "INSERT INTO account (username, password, role) VALUES (?, ?, ?)";
+        String insertRoleSql = "";
+
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            // Insert the user into the 'account' table
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setString(3, role);
             stmt.executeUpdate();
             System.out.println("Added user with username: " + username);
+
+            // Depending on the role, insert the user into the respective table
+            if ("manager".equals(role)) {
+                // Insert into 'manager' table
+                insertRoleSql = "INSERT INTO manager (username, name, gender, dob, email, department) VALUES (?,?,?,?,?,?)";
+                try (PreparedStatement stmtManager = conn.prepareStatement(insertRoleSql)) {
+                	stmtManager.setString(1, username);
+                	stmtManager.setString(2, "Welcome");
+                	stmtManager.setString(3, "Male");
+                	stmtManager.setDate(4, Date.valueOf("1990-05-15")); 
+                	stmtManager.setString(5, "welcome@welcome.welcome");
+                	stmtManager.setString(6, "Welcome");
+                    stmtManager.executeUpdate();
+                    System.out.println("Added manager with username: " + username);
+                }
+            } else if ("employee".equals(role)) {
+                // Insert into 'employee' table
+            	insertRoleSql = "INSERT INTO employee (username, name, gender, dob, email, department) VALUES (?,?,?,?,?,?)";
+                try (PreparedStatement stmtEmployee = conn.prepareStatement(insertRoleSql)) {
+                    stmtEmployee.setString(1, username);
+                    stmtEmployee.setString(2, "Welcome");
+                    stmtEmployee.setString(3, "Male");
+                    stmtEmployee.setDate(4, Date.valueOf("1990-05-15")); 
+                    stmtEmployee.setString(5, "welcome@welcome.welcome");
+                    stmtEmployee.setString(6, "Welcome");
+                    stmtEmployee.executeUpdate();
+                    System.out.println("Added employee with username: " + username);
+                }
+            } else {
+                System.out.println("Invalid role: " + role);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     // Delete a user
     public void deleteUser(String username) {
@@ -202,11 +240,12 @@ public class AccountDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();  // You should log this in production with a logging framework like SLF4J or Log4j
+            e.printStackTrace();  // Log exception in production code
         }
         
         return null;  // Return null if no ID was found
     }
+
 
     
     public Employee getEmployeeById(Integer id) {
