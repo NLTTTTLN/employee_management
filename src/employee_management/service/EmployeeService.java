@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import employee_management.bean.Account;
+
 import employee_management.bean.Employee;
 import employee_management.bean.EmployeeSubmitItem;
 import employee_management.dao.EmployeeDAO;
@@ -59,6 +59,29 @@ public class EmployeeService {
         try {
             employeeDAO.saveSubmitItem(item);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updateEmployee(String username, String name, String gender, String dob, String email, String phone_num, String address) {
+        try {
+            java.sql.Date dateOfBirth = java.sql.Date.valueOf(dob);
+
+            // Ensure we don't modify the username, just the other fields
+            return employeeDAO.updateEmployee(username, name, gender, dateOfBirth, email, phone_num, address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean changeEmployeePassword(String username, String oldPassword, String newPassword) {
+        try {
+            
+
+            // Ensure we don't modify the username, just the other fields
+            return employeeDAO.changeEmployeePassword(username, oldPassword, newPassword);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
