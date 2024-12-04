@@ -216,5 +216,44 @@ public class EmployeeDAO {
             return false;  // Return false if any error occurs
         }
     }
+    
+ // Method to save submit item (either Report or Absence Request)
+    public boolean saveSubmitItem(EmployeeSubmitItem item) {
+        // Check the type of the item and insert into the correct table
+        String sql = "";
+        
+        if ("Report".equalsIgnoreCase(item.getType())) {
+            sql = "INSERT INTO Reports (title, description, employee_id, file_path) VALUES (?, ?, ?, ?)";
+        } else if ("Absence Request".equalsIgnoreCase(item.getType())) {
+            sql = "INSERT INTO AbsenceRequests (title, description, employee_id) VALUES (?, ?, ?)";
+        } else {
+            // Invalid item type
+            return false;
+        }
 
+        // Insert data into the appropriate table
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        	System.out.println("Start storing item:" + item);
+            // Set the parameters
+            stmt.setString(1, item.getTitle());
+            stmt.setString(2, item.getDescription());
+            stmt.setInt(3, item.getEmployeeId());
+
+            // If it's a Report, add the file_path
+            if ("Report".equalsIgnoreCase(item.getType())) {
+                stmt.setString(4, item.getFilePath());  // Set file path for Report
+            } 
+
+            // Execute the query
+            int rowsAffected = stmt.executeUpdate();
+
+            // If rows are affected, insertion is successful
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the exception (consider using a logger)
+            return false;
+        }
+    }
 }
