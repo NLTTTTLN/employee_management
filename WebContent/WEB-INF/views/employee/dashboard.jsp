@@ -84,13 +84,25 @@
                         <h3 id="modal-title">Tạo Đơn</h3>
                         <form id="createItemForm">
                             <input type="hidden" id="itemType" value="" />
-                            <label for="itemTitle">Tiêu đề:</label>
-                            <input type="text" id="itemTitle" name="itemTitle" required /><br>
+                            <div>
+                            	<label for="itemTitle">Tiêu đề:</label>
+                            	<input type="text" id="itemTitle" name="itemTitle" required /><br>
+                            </div>
 
-                            <label for="itemDescription">Mô tả:</label>
-                            <textarea id="itemDescription" name="itemDescription" required></textarea><br>
-
+                            <div>
+                            	<label for="itemDescription">Mô tả:</label>
+                            	<textarea id="itemDescription" name="itemDescription" required></textarea><br>
+                            </div>
+                            <!-- Conditionally displayed File Upload field for Reports -->
+					            <div id="file-upload-container" style="display: none;">
+					                <label for="itemFile">Tệp đính kèm:</label>
+					                <input type="file" id="itemFile" name="itemFile" />
+					            </div>
+					            
+					            
+							<div class="modal-buttons">
                             <button type="submit" class="submitBtn">Tạo</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -99,7 +111,7 @@
                 <div id="submit-detail-modal" class="modal">
 				    <div class="modal-content">
 				    <span class="close-btn" id="closeSubmitModalBtn">&times;</span>
-				        <h3>Thêm</h3>
+				        <h3>Chi tiết</h3>
 				     
 				        <p id="modal-type"></p>
 				        <p id="modal-title"></p>
