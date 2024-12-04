@@ -359,6 +359,22 @@ p{
 	
 }
 
+.dashboard .submission {
+	transition: all 0.3s ease;
+}
+.dashboard .submission:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+.dashboard .submission td{
+	font-family: Poppins, sans-serif;
+	font-weight:600;
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+  	text-align: left;
+	
+}
+
 .dashboard .pending-item {
 	transition: all 0.3s ease;
 }
@@ -366,7 +382,6 @@ p{
   background-color: #e0e0e0;
   cursor: pointer;
 }
-
 
 
 /* Modal styling */
@@ -483,7 +498,17 @@ p{
 #rejectBtn:hover {
     background-color: #b71c1c;  /* Darker red on hover */
 }
+#deleteSubmitBtn {
+	width: 20% !important;
+    background-color: #d32f2f;  /* Red color for Reject */
+    float: right;
+    margin-left: auto !important;
+    margin-right:20px !important;
+}
 
+#deleteSubmitBtn:hover {
+    background-color: #b71c1c;  /* Darker red on hover */
+}
 #submit-detail-modal .close-btn {
 	color: #d32f2f;
     float: right;
@@ -501,6 +526,183 @@ p{
 }
 
  #submit-detail-modal .close-btn:hover {
+  color: #ffffff; /* Change text color on hover */
+    background-color: #d32f2f; /* Add background color on hover */
+    border-color: #ffffff; /* Change border color on hover */
+}
+
+/* Modal styling */
+#create-item-modal{
+ font-family: Poppins, sans-serif;
+		    display: none;
+		    position: fixed;
+		    z-index: 1;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    overflow: auto;
+		    background-color: rgba(0, 0, 0, 0.4);
+		    border-radius: 4px;
+		    transition: all 0.3s ease;
+}
+#create-item-modal h3{
+	font-size: 20px;
+	margin-top: 10px;
+}
+/* Add space between elements inside the modal */
+
+/* More specific margin adjustments for certain elements */
+#create-item-modal > .modal-content #itemTitle {
+    margin-bottom: 30px; /* Space below the type */
+}
+
+
+#create-item-modal > .modal-content #itemDescription {
+    margin-bottom: 40px; /* Space below description */
+}
+
+#create-item-modal > .modal-content #modal-file-path {
+    margin-top: 10px; /* Space above file path */
+    margin-bottom: 20px; /* Space below file path */
+}
+
+#create-item-modal > .modal-content {
+  background-color: #ffffff;
+		    margin: 10% auto;
+		    padding: 20px;
+		    border: 1px solid #ddd;
+		    border-radius: 8px;
+		    width: 50%; /* Adjust width as needed */
+		    max-width: 500px;
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		    font-family: Poppins, sans-serif;
+}
+#create-item-modal > .modal-content a {
+ 	color: #d32f2f;
+ 	font-size:14px;
+}
+#create-item-modal > .modal-content p {
+	font-size:14px;
+}
+/* Modal buttons container styling */
+#create-item-modal .modal-buttons {
+    display: flex;
+    justify-content: space-between; /* This will position the buttons on the left and right */
+    margin-top: 20px; /* Optional: Adds space above the buttons */
+}
+/* Styling for modal buttons (Duyệt and Từ chối) */
+#create-item-modal .modal-buttons button {
+    font-family: Poppins, sans-serif;  /* Use the same font as in the sidebar */
+    font-weight: bold;  /* Same font weight */
+    background-color: #d32f2f;  /* Red background */
+    color: white;  /* White text */
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;  /* Smooth transition on hover */
+    width: 100%;  /* Make buttons take full width of the container */
+}
+
+/* Hover effect */
+#create-item-modal .modal-buttons button:hover {
+    background-color: #b71c1c;  /* Darker red on hover */
+}
+
+/* Focused state (optional, if you want to indicate focus) */
+#create-item-modal .modal-buttons button:focus {
+    outline: none;  /* Remove outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);  /* Add light shadow when focused */
+}
+
+
+#create-item-modal .close-btn {
+	color: #d32f2f;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px; /* Set width of the button */
+    height: 40px; /* Set height of the button (same as width for square) */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Center the text vertically by setting line-height to the same as the height */
+    border-radius: 4px; /* Optional: Add rounded corners */
+    background-color: #f7f7f7; /* Transparent background */
+    padding: 0; /* Remove default padding */
+}
+
+ #create-item-modal .close-btn:hover {
+  color: #ffffff; /* Change text color on hover */
+    background-color: #d32f2f; /* Add background color on hover */
+    border-color: #ffffff; /* Change border color on hover */
+}
+
+#choose-type-modal{
+ font-family: Poppins, sans-serif;
+		    display: none;
+		    position: fixed;
+		    z-index: 1;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    overflow: auto;
+		    background-color: rgba(0, 0, 0, 0.4);
+		    border-radius: 4px;
+		    transition: all 0.3s ease;
+}
+#choose-type-modal > .modal-content {
+  background-color: #ffffff;
+		    margin: 10% auto;
+		    padding: 20px;
+		    border: 1px solid #ddd;
+		    border-radius: 8px;
+		    width: 50%; /* Adjust width as needed */
+		    max-width: 500px;
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		    font-family: Poppins, sans-serif;
+}
+#choose-type-modal button {
+     font-family: Poppins, sans-serif;
+	    font-weight:600;
+	    display: block;
+    width: 100%; /* Take full width of the container */
+    padding: 12px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center; /* Center text in buttons */
+    color: #d32f2f;
+    transition: all 0.3s ease;
+}
+
+#choose-type-modal button:hover {
+    background-color: #e0e0e0;
+}
+#choose-type-modal .close-btn {
+	color: #d32f2f;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px; /* Set width of the button */
+    height: 40px; /* Set height of the button (same as width for square) */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Center the text vertically by setting line-height to the same as the height */
+    border-radius: 4px; /* Optional: Add rounded corners */
+    background-color: #f7f7f7; /* Transparent background */
+    padding: 0; /* Remove default padding */
+}
+
+ #choose-type-modal .close-btn:hover {
   color: #ffffff; /* Change text color on hover */
     background-color: #d32f2f; /* Add background color on hover */
     border-color: #ffffff; /* Change border color on hover */
