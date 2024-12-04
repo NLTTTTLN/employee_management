@@ -6,6 +6,7 @@ public class EmployeeSubmitItem {
     private String title;
     private String description;
     private String filePath;
+    private int employee_id;
     private String submittedBy;
     private String status;
     private String date;
@@ -52,13 +53,21 @@ public class EmployeeSubmitItem {
 
 
 
-
+	
 
 
 
 	public int getId() {
 		return id;
 	}
+	public int getEmployeeId() {
+		return employee_id;
+	}
+
+	public void setEmployeeId(int employee_id) {
+		this.employee_id = employee_id;
+	}
+
 	public String getStatus() {
 		return status;
 	}
