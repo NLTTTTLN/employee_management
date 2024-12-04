@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import employee_management.bean.Account;
+
 import employee_management.bean.Employee;
 import employee_management.bean.EmployeeSubmitItem;
 
@@ -254,6 +254,50 @@ public class EmployeeDAO {
         } catch (SQLException e) {
             e.printStackTrace(); // Log the exception (consider using a logger)
             return false;
+        }
+    }
+    
+    public boolean updateEmployee(String username, String name, String gender, java.sql.Date dob, String email, String phone_num, String address) {
+        String sql = "UPDATE employee SET name = ?, gender = ?, dob = ?, email = ?, phone_num = ?, address = ? WHERE username = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set parameters for the PreparedStatement
+            stmt.setString(1, name);
+            stmt.setString(2, gender);
+            stmt.setDate(3, dob);
+            stmt.setString(4, email);
+            stmt.setString(5, phone_num);
+            stmt.setString(6, address);
+            stmt.setString(7, username); // Ensure username is the last parameter (where the condition is)
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // If at least one row was updated, return true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // If an error occurred, return false
+        }
+    }
+    
+    public boolean changeEmployeePassword(String username, String oldPassword, String newPassword) {
+    	String sql = "UPDATE account SET password = ? WHERE username = ? AND password = ?";
+    	System.out.println("Start checking for username:" + username +", old password:" + oldPassword + ", newPassword: " + newPassword);
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set parameters for the PreparedStatement
+            stmt.setString(1, newPassword);
+            stmt.setString(2, username);
+            stmt.setString(3, oldPassword); // Ensure username is the last parameter (where the condition is)
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // If at least one row was updated, return true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // If an error occurred, return false
         }
     }
 }
