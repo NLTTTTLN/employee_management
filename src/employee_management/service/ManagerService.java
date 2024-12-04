@@ -6,9 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import employee_management.bean.Account;
+
 import employee_management.bean.Employee;
 import employee_management.bean.EmployeeSubmitItem;
+import employee_management.bean.Manager;
 import employee_management.dao.ManagerDAO;
 
 @Service
@@ -19,11 +20,21 @@ public class ManagerService {
     public ManagerService(ManagerDAO managerDAO) {
         this.managerDAO = managerDAO; 
     }
+    
+    public Manager getManagerById(Integer id) {
+    	System.out.println("Fetching Manager for ID: " + id);
+    	Manager manager= managerDAO.getManagerById(id);
+    	return manager;
+    }
 
     public int getEmployeeCount() {
         return managerDAO.countEmployees(); 
     }
-    
+    public int getManagerIdByUsername(String username) {
+    	System.out.println("Getting Manager ID for username: " + username);
+        int managerId= managerDAO.findManagerIdByUsername(username);
+        return managerId;
+    }
  // Get the count of pending absence requests
     public int getPendingAbsenceCount() {
         try {
@@ -109,7 +120,29 @@ public class ManagerService {
         }
     }
     
+    public boolean updateManager(String username, String name, String gender, String dob, String email, String phone_num, String address) {
+        try {
+            java.sql.Date dateOfBirth = java.sql.Date.valueOf(dob);
+
+            // Ensure we don't modify the username, just the other fields
+            return managerDAO.updateManager(username, name, gender, dateOfBirth, email, phone_num, address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     
+    public boolean changeManagerPassword(String username, String oldPassword, String newPassword) {
+        try {
+            
+
+            // Ensure we don't modify the username, just the other fields
+            return managerDAO.changeManagerPassword(username, oldPassword, newPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 }
