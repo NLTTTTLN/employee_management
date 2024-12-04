@@ -32,4 +32,26 @@ public class EmployeeService {
             throw new RuntimeException("Failed to fetch reports and requests", e);
         }
     }
+    public EmployeeSubmitItem getSubmitItemDetail(Integer itemId, String itemType) {
+        if ("Report".equalsIgnoreCase(itemType)) {
+            return employeeDAO.getReportDetail(itemId);  // Fetch report detail
+        } else if ("Absence Request".equalsIgnoreCase(itemType)) {
+            return employeeDAO.getAbsenceRequestDetail(itemId);  // Fetch absence request detail
+        }
+        return null;  // If invalid type, return null or handle accordingly
+    }
+    public boolean deleteSubmit(Integer itemId, String itemType) {
+    	System.out.println("ManagerService deleting submit ID: " + itemId + ", type: " + itemType);
+        
+        try {
+            // Determine the status based on action
+            boolean status = employeeDAO.deleteSubmit(itemId,itemType);
+            
+            // Pass the status to DAO layer
+            return status;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
