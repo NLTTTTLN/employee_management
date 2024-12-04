@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import employee_management.bean.Account;
 import employee_management.bean.Employee;
 import employee_management.bean.EmployeeSubmitItem;
+import employee_management.bean.Manager;
 
 @Repository
 public class ManagerDAO {
@@ -54,6 +55,65 @@ public class ManagerDAO {
         }
         return account;
     }
+    
+ // Method to get Manager ID by username
+    public int findManagerIdByUsername(String username) {
+        String sql = "SELECT manager_id FROM manager WHERE username = ?";  // Assuming role is stored in the 'account' table
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set the username in the query
+            stmt.setString(1, username);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Return the manager_id if found
+                    return rs.getInt("manager_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1;  // Return -1 if manager is not found
+    }
+    
+    public Manager getManagerById(Integer id) {
+        String sql = "SELECT manager_id, username, name, gender, dob, email, phone_num, address, department " +
+                     "FROM manager " +
+                     "WHERE manager_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);  // Set the manager ID parameter
+
+            // Execute the query
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Create a new Manager object and populate it with data from the result set
+                    Manager manager = new Manager();
+                    manager.setManagerId(rs.getInt("manager_id"));
+                    manager.setUsername(rs.getString("username"));
+                    manager.setName(rs.getString("name"));
+                    manager.setGender(rs.getString("gender"));
+                    manager.setDob(rs.getDate("dob"));
+                    manager.setEmail(rs.getString("email"));
+                    manager.setphone_num(rs.getString("phone_num"));
+                    manager.setAddress(rs.getString("address"));
+                    manager.setDepartment(rs.getString("department"));
+
+                    return manager;  // Return the Manager object populated with data
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // You might want to log this in a production environment
+        }
+
+        return null;  // Return null if no manager is found with the given ID
+    }
+
 
     // Count employee accounts
     public int countEmployees() {
@@ -393,5 +453,48 @@ public class ManagerDAO {
             return false; // If an error occurred, return false
         }
     }
+    
+    public boolean updateManager(String username, String name, String gender, java.sql.Date dob, String email, String phone_num, String address) {
+        String sql = "UPDATE manager SET name = ?, gender = ?, dob = ?, email = ?, phone_num = ?, address = ? WHERE username = ?";
 
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set parameters for the PreparedStatement
+            stmt.setString(1, name);
+            stmt.setString(2, gender);
+            stmt.setDate(3, dob);
+            stmt.setString(4, email);
+            stmt.setString(5, phone_num);
+            stmt.setString(6, address);
+            stmt.setString(7, username); // Ensure username is the last parameter (where the condition is)
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // If at least one row was updated, return true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // If an error occurred, return false
+        }
+    }
+    
+    public boolean changeManagerPassword(String username, String oldPassword, String newPassword) {
+    	String sql = "UPDATE account SET password = ? WHERE username = ? AND password = ?";
+    	System.out.println("Start checking for username:" + username +", old password:" + oldPassword + ", newPassword: " + newPassword);
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set parameters for the PreparedStatement
+            stmt.setString(1, newPassword);
+            stmt.setString(2, username);
+            stmt.setString(3, oldPassword); // Ensure username is the last parameter (where the condition is)
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // If at least one row was updated, return true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // If an error occurred, return false
+        }
+    }
 }
