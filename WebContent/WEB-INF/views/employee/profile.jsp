@@ -48,38 +48,45 @@
                     <h2>Thông tin cá nhân</h2>
 					<input type="hidden" id="employeeId" value="${employeeId}" />
                     <!-- Form to display and edit employee data -->
-                    <form:form method="POST" modelAttribute="employee" action="<c:url value='/employee/profile'/>">
-                        
+                    <div id="profile-modal">
+                        <div>
+                        	<input  type="hidden" id="username" value="${employee.username}" />
+                        </div>
 
                         <div>
                             <label for="name">Tên</label>
-                            <form:input path="name" id="name" value="${employee.name}" />
+                            <input  id="name" value="${employee.name}" />
                         </div>
 
                         <div>
                             <label for="gender">Giới tính</label>
-                            <form:input path="gender" id="gender" value="${employee.gender}" />
+                            <input  id="gender" value="${employee.gender}" />
                         </div>
                         
                         <div>
                             <label for="dob">Ngày sinh</label>
-                            <form:input path="dob" id="dob" value="${employee.dob}" />
+                            <input  id="dob" value="${employee.dob}" />
                         </div>
                         
                         <div>
                             <label for="email">Địa chỉ email</label>
-                            <form:input path="email" id="email" value="${employee.email}" />
+                            <input  id="email" value="${employee.email}" />
                         </div>
                         
                         <div>
                             <label for="phone_num">Số điện thoại</label>
-                            <form:input path="phone_num" id="phone_num" value="${employee.phone_num}" />
+                            <input  id="phone_num" value="${employee.phone_num}" />
+                        </div>
+                        
+                        <div>
+                            <label for="address">Địa chỉ</label>
+                            <input  id="address" value="${employee.address}" />
                         </div>
 
                         <!-- Add more fields as necessary -->
 
-                        <button type="submit">Lưu thay đổi</button>
-                    </form:form>
+                        <button id="submitProfileBtn" type="submit">Lưu thay đổi</button>
+                    </div>
                 
                 </div>
                 
@@ -104,7 +111,7 @@
 				            <input type="password"  id="confirmPass" type="password" />
 				        </div>
 				        			
-			        <button type="submit">Cập nhật</button>
+			        <button id="submitChangePwdBtn" type="submit">Cập nhật</button>
 			        </div>
 
 			</div>
