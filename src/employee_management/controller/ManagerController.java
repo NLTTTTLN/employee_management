@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import employee_management.bean.Manager;
+import employee_management.bean.Account;
 import employee_management.bean.Employee;
 import employee_management.bean.EmployeeSubmitItem;
 import employee_management.service.ManagerService;
@@ -201,32 +206,101 @@ public class ManagerController {
         return "manager/management";
     }
 
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public String showManagerProfile(HttpSession session, Model model) {
+		System.out.println("Entering showManagerProfile method");
+	    // Retrieve the username from the session
+	    Account loggedInUser = (Account) session.getAttribute("user");
+	    if (loggedInUser == null) {
+	        System.out.println("User not found in session!");
+	    } else {
+	        System.out.println("User found in session: " + loggedInUser.getUsername());
+	    }
+	    if (loggedInUser != null && "manager".equals(loggedInUser.getRole())) {
+	        String username = loggedInUser.getUsername();  // Get the username from the session
 
-	/*
-	 * @RequestMapping(value = "/update", method = RequestMethod.POST) public String
-	 * updateEmployee(
-	 * 
-	 * @RequestParam("username") String username,
-	 * 
-	 * @RequestParam("name") String name,
-	 * 
-	 * @RequestParam("gender") String gender,
-	 * 
-	 * @RequestParam("dob") java.sql.Date dob,
-	 * 
-	 * @RequestParam("email") String email,
-	 * 
-	 * @RequestParam("phone_num") String phone_num,
-	 * 
-	 * @RequestParam("address") String address,
-	 * 
-	 * @RequestParam("department") String department,
-	 * 
-	 * @RequestParam("salary") Double salary) {
-	 * 
-	 * managerService.updateEmployee(username, name, gender, dob, email, phone_num,
-	 * address, department, salary); System.out.println("Updating employee: " +
-	 * username); return "redirect:/manager/management"; }
-	 */
+	        // Assuming the service method to get manager ID by username
+	        int managerId = managerService.getManagerIdByUsername(username);
+            System.out.println("Manager ID: " + managerId);
 
+	        // Fetch manager profile using the managerId
+	        Manager managerProfile = managerService.getManagerById(managerId);
+            System.out.println("Manager Profile: " + managerProfile);
+
+	        if (managerProfile != null) {
+	            // Add manager data to the model for rendering in the view
+	            model.addAttribute("ManagerId", managerId);
+	            model.addAttribute("Manager", managerProfile);
+
+
+	        } else {
+	            // Handle case when manager profile is not found (optional)
+	            model.addAttribute("errorMessage", "Manager profile not found.");
+	        }
+	    } else {
+	        // Handle the case where the user is not logged in or not a manager
+	        model.addAttribute("errorMessage", "You are not authorized to view this page.");
+	    }
+
+	    return "manager/profile";
+	}
+
+	
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody  // This annotation will return the result as JSON
+	public Map<String, Object> updateManager(@RequestParam String username,
+	                                        @RequestParam String name,
+	                                        @RequestParam String gender,
+	                                        @RequestParam String dob,
+	                                        @RequestParam String email,
+	                                        @RequestParam String phone_num,
+	                                        @RequestParam String address) {
+
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        boolean success = managerService.updateManager(username, name, gender, dob, email, phone_num, address);
+
+	        if (success) {
+	            response.put("success", true);
+	            response.put("message", "Manager updated successfully.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "Failed to update manager.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "Error while updating manager.");
+	    }
+	    return response;
+	}
+	
+	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
+	@ResponseBody  // This annotation will return the result as JSON
+	public Map<String, Object> changeManagerPassword(@RequestParam String username,
+											@RequestParam String oldPassword,
+	                                        @RequestParam String newPassword
+	                                     ) {
+
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	    	System.out.println("Receiving username:" + username +", old password:" + oldPassword + ", newPassword: " + newPassword);
+	        boolean success = managerService.changeManagerPassword(username, oldPassword, newPassword);
+
+	        if (success) {
+	            response.put("success", true);
+	            response.put("message", "Manager updated successfully.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "Failed to update manager.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "Error while updating manager.");
+	    }
+	    System.out.println("Respone change password:" + response);
+	    return response;
+	}
 }
