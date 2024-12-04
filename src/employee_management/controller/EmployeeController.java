@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,11 +18,16 @@ import employee_management.bean.EmployeeSubmitItem;
 import employee_management.service.AccountService;
 import employee_management.service.EmployeeService;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -59,17 +65,64 @@ public class EmployeeController{
 
         return response;
 	}
-
+	@RequestMapping(value = "/submit-detail", method = RequestMethod.GET)
+	@ResponseBody
+	public EmployeeSubmitItem getSubmitDetail(@RequestParam("itemId") Integer itemId, 
+											@RequestParam("itemType") String itemType) {
+		System.out.println("Searching submit item with id: " + itemId + ", type:" + itemType);
+		EmployeeSubmitItem item = employeeService.getSubmitItemDetail(itemId, itemType);
+		System.out.println("Found Submit Item: " + item);
+	    return item; // Return the employee as JSON
+	}
 
 	// Redirect /employee to the dashboard page
     @RequestMapping("/")
     public String redirectToDashboard(@RequestParam("id") int employeeId, RedirectAttributes attributes) {
         // Redirect to the dashboard page, passing the employee id
-        return "redirect:/employee_management/employee/dashboard?id=" + employeeId;
+        return "redirect:employee/dashboard?id=" + employeeId;
     }
 	
-    
-    
+    @RequestMapping(value = "/download/{fileName:.+}", method = RequestMethod.GET)
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response,
+							@PathVariable String fileName) {
+		String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/uploads/reports");
+		Path file = Paths.get(dataDirectory,fileName);
+		if (Files.exists(file)) {
+			response.setContentType("application//pdf");
+			response.addHeader("Content-Disposition", "attachment; filename="+fileName);
+			try
+			{
+				Files.copy(file, response.getOutputStream());
+				response.getOutputStream().flush();
+			}
+			catch(IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+    @RequestMapping(value = "/delete-submit", method = RequestMethod.POST)
+    @ResponseBody
+	public Map<String, Object> deleteEmployee(@RequestParam("itemId") Integer itemId, 
+			@RequestParam("itemType") String itemType) {
+    	Map<String, Object> response = new HashMap<>();
+		System.out.println("Deleting submit ID: " + itemId + ",type: " + itemType);
+		try {
+	        boolean success = employeeService.deleteSubmit(itemId, itemType);;
+
+	        if (success) {
+	            response.put("success", true);
+	            response.put("message", "Item delete successfully.");
+	        } else {
+	            response.put("failed", false);
+	            response.put("message", "Failed to delete the item.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("failed", false);
+	        response.put("message", "Error occurred while  the item's status.");
+	    }
+	    return response;
+	}
     
 	
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
