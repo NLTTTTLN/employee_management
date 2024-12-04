@@ -1233,7 +1233,7 @@ p{
     margin-bottom: 20px;
 }
 
-.profile form {
+.profile #profile-modal {
    	display: flex; /* Use Flexbox */
     flex-direction: column; /* Stack children vertically */
     width: 60%; /* Ensure the form takes the full width of .profile */
@@ -1245,19 +1245,19 @@ p{
 
 }
 
-.profile form div {
+.profile #profile-modal div {
     display: flex; /* Flexbox to make items inline */
     justify-content: space-between; /* Space between label and input */
     margin-bottom: 20px;
     align-items: center; /* Vertically center label and input */
 }
 
-.profile form label {
+.profile #profile-modal label {
     font-weight: bold;
     
 }
 
-.profile form input {
+.profile #profile-modal input {
 	font-family: Poppins, sans-serif;
 	font-weight:300;
     padding: 12px; /* Increase padding inside the input box */
@@ -1269,7 +1269,7 @@ p{
     box-sizing: border-box; /* Ensure padding does not affect width calculation */
 }
 
-.profile form button {
+.profile #profile-modal button {
 	font-family: Poppins, sans-serif;
 	font-weight:600;
 	background-color: #d32f2f;
@@ -1285,7 +1285,7 @@ p{
     transition: all 0.3s ease;
 }
 
-.profile form button:hover {
+.profile #profile-modal button:hover {
     background-color: #b71c1c;
 		
 }
@@ -1390,7 +1390,7 @@ p{
    	display: flex; /* Use Flexbox */
     flex-direction: column; /* Stack children vertically */
     width: 80%; /* Ensure the form takes the full width of .profile */
-    max-width: 500px; /* Set a max-width for the form */
+    max-width: 600px; /* Set a max-width for the form */
     margin: 20px auto; /* Center the form horizontally within its parent */
     text-align: left; /* Ensure the text inside form fields aligns left */
     padding: 20px; /* Optional padding inside the form */
