@@ -47,8 +47,31 @@
                 <h3>Lịch sử hoạt động</h3>
                 <div class="recent-activities">
 					<div class="activity-container">
+					
                             <div class="activity-section">
+                            	<input type="text" class="searchbox" id="myInput1" onkeyup="myFunction1()" placeholder="Search for names.." title="Type in a name">
+						             <script>
+									function myFunction1() {
+									    // Declare variables
+									    var input, filter, list, li, textContent, i, txtValue;
+									    input = document.getElementById("myInput1");
+									    filter = input.value.toUpperCase();
+									    list = document.getElementById("managerActivities");  // Assuming your list's ID is "employeeActivities"
+									    li = list.getElementsByTagName("li");
+									
+									    // Loop through all list items, and hide those who don't match the search query
+									    for (i = 0; i < li.length; i++) {
+									        textContent = li[i].textContent || li[i].innerText;
+									        if (textContent.toUpperCase().indexOf(filter) > -1) {
+									            li[i].style.display = "";  // Show the list item
+									        } else {
+									            li[i].style.display = "none";  // Hide the list item
+									        }
+									    }
+									}
+									</script>
                                 <div class="scrollable-table">
+                                
                                 <table id="managerActivitiesTable">
                                     <thead>
                                         <tr>
@@ -62,7 +85,29 @@
                                 </div>
                             </div>
                             <div class="activity-section">
+                            <input type="text" class="searchbox" id="myInput2" onkeyup="myFunction2()" placeholder="Search for names.." title="Type in a name">
+						             <script>
+									function myFunction2() {
+									    // Declare variables
+									    var input, filter, list, li, textContent, i, txtValue;
+									    input = document.getElementById("myInput2");
+									    filter = input.value.toUpperCase();
+									    list = document.getElementById("employeeActivities");  // Assuming your list's ID is "employeeActivities"
+									    li = list.getElementsByTagName("li");
+									
+									    // Loop through all list items, and hide those who don't match the search query
+									    for (i = 0; i < li.length; i++) {
+									        textContent = li[i].textContent || li[i].innerText;
+									        if (textContent.toUpperCase().indexOf(filter) > -1) {
+									            li[i].style.display = "";  // Show the list item
+									        } else {
+									            li[i].style.display = "none";  // Hide the list item
+									        }
+									    }
+									}
+									</script>
                                 <div class="scrollable-table">
+                                
                                 	<table id="employeeActivitiesTable">
                                     <thead>
                                         <tr>
