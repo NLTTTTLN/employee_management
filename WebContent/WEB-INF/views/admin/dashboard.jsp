@@ -48,6 +48,7 @@
                 <div class="recent-activities">
 					<div class="activity-container">
                             <div class="activity-section">
+                                <div class="scrollable-table">
                                 <table id="managerActivitiesTable">
                                     <thead>
                                         <tr>
@@ -58,9 +59,11 @@
                                         <!-- Recent activities by managers will be populated here -->
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                             <div class="activity-section">
-                                <table id="employeeActivitiesTable">
+                                <div class="scrollable-table">
+                                	<table id="employeeActivitiesTable">
                                     <thead>
                                         <tr>
                                             <th>Nhân viên</th>
@@ -70,6 +73,7 @@
                                         <!-- Recent activities by employees will be populated here -->
                                     </tbody>
                                 </table>
+                                </div>
                             </div>	
                 </div>
             </div>
