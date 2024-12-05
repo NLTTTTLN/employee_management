@@ -97,9 +97,8 @@
 
                                 <label for="gender">Giới tính:</label>
                                 <select id="gender" name="gender" required>
-                                    <option value="male">Nam</option>
-                                    <option value="female">Nữ</option>
-                                    <option value="other">Khác</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
                                 </select>
                                 <br>
 
@@ -198,9 +197,8 @@
                     
                                 <label for="editGender">Giới tính:</label>
                                 <select id="editGender" name="gender" required>
-                                    <option value="Male">Nam</option>
-                                    <option value="Female">Nữ</option>
-                                    <option value="Other">Khác</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
                                 </select>
                                 <br>
                     
