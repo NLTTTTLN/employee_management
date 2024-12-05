@@ -46,8 +46,32 @@
                     <div class="table-container">
                         <div class="table-box">
                             <h3>Danh sách nhân viên</h3>
+                            <input type="text" class="searchbox" id="myInput1" onkeyup="myFunction1()" placeholder="Search for titles..." title="Type in a name">
+				             <script>
+									function myFunction1() {
+									  // Declare variables
+									  var input, filter, table, tr, td, i, txtValue;
+									  input = document.getElementById("myInput1");
+									  filter = input.value.toUpperCase();
+									  table = document.getElementById("manager-management-table");
+									  tr = table.getElementsByTagName("tr");
+									
+									  // Loop through all table rows, and hide those who don't match the search query
+									  for (i = 0; i < tr.length; i++) {
+									    td = tr[i].getElementsByTagName("td")[1];
+									    if (td) {
+									      txtValue = td.textContent || td.innerText;
+									      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+									        tr[i].style.display = "";
+									      } else {
+									        tr[i].style.display = "none";
+									      }
+									    }
+									  }
+									}
+						</script>
                             <div class="scrollable-table">
-                                <table class="manager-management-table" border="1">
+                                <table id="manager-management-table" class="manager-management-table" border="1">
                                     <thead>
                                         <tr>
                                             <th>Tên tài khoản</th>
