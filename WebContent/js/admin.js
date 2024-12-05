@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('managerActivities').innerHTML = managerActivities;
                 document.getElementById('employeeActivities').innerHTML = employeeActivities;
             })
-            .catch(error => console.error('Error fetching dashboard data:', error));
+            .catch(error => console.error('Lỗi đồng bộ:', error));
     }
 
     fetchDashboardData();
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('/employee_management/admin/management-data') 
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
+                    throw new Error('Đồng bộ dữ liệu thất bại');
                 }
                 return response.json();
             })
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 populateTable('employees', data.employeeData);
                 callback(data);
             })
-            .catch(error => console.error('Error fetching user data:', error));
+            .catch(error => console.error('Đồng bộ dữ liệu thất bại:', error));
     }
 
     fetchUsers();
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    if (username && password && role) {
 	        addUser(username, password, role);
 	    } else {
-	        alert('Please provide all details to add a user.');
+	        alert('Vui lòng điền đầy đủ thông tin.');
 	    }
 	};
 
@@ -166,13 +166,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (actionType === 'promote') {
             if (!selectedUser) {
-                alert('Please select a user to promote.');
+                alert('Vui lòng chọn nhân viên bạn muốn thăng chức.');
                 return;
             }
             promoteUser(selectedUser);
         } else if (actionType === 'delete') {
             if (!selectedUser) {
-                alert('Please select a user to delete.');
+                alert('Vui lòng chọn nhân viên bạn muốn xóa.');
                 return;
             }
             deleteUser(selectedUser);
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to add user');
+                throw new Error('Thêm người dùng thất bại');
             }
             return response.text();
         })
@@ -216,12 +216,12 @@ document.addEventListener('DOMContentLoaded', function() {
             fetchUsers(); // Refresh the tables
             closeAddModal(); // Close the Add Modal
         })
-        .catch(error => console.error('Error adding user:', error));
+        .catch(error => console.error('Lỗi trong khi thêm người dùng:', error));
     }
 
     // Delete User function
     function deleteUser(username) {
-        if (confirm(`Are you sure you want to delete user ${username}?`)) {
+        if (confirm(`Bạn chắc chắn muốn xóa người dùng ${username}?`)) {
             fetch('/employee_management/admin/delete', {
                 method: 'POST',
                 headers: {
@@ -231,21 +231,21 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to delete user');
+                    throw new Error('Xóa người dùng thất bại');
                 }
                 return response.text();
             })
             .then(() => {
-                alert(`User ${username} deleted successfully.`);
+                alert(`Người dùng ${username} được xóa thành công.`);
                 fetchUsers(); // Refresh the table
             })
-            .catch(error => console.error('Error deleting user:', error));
+            .catch(error => console.error('Lỗi trong khi xóa người dùng:', error));
         }
     }
 
     // Promote User function
     function promoteUser(username) {
-        if (confirm(`Are you sure you want to promote user ${username} to Manager?`)) {
+        if (confirm(`Bạn chắc chắn muốn thăng chức nhân viên  ${username} lên quản lý?`)) {
             fetch('/employee_management/admin/promote', {
                 method: 'POST',
                 headers: {
@@ -255,15 +255,15 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to promote user');
+                    throw new Error('Thăng chức thất bại.');
                 }
                 return response.text();
             })
             .then(() => {
-                alert(`User ${username} promoted successfully.`);
+                alert(`Nhân viên ${username} được thăng chức thành công.`);
                 fetchUsers(); // Refresh the table
             })
-            .catch(error => console.error('Error promoting user:', error));
+            .catch(error => console.error('Thất bại trong việc thăng chức người dùng:', error));
         }
     }
 });
