@@ -18,8 +18,8 @@ import employee_management.bean.EmployeeSubmitItem;
 @Repository
 public class EmployeeDAO {
     private static final String URL = "jdbc:mysql://localhost:3306/employee_management"; // Nhập tên Schema database
-    private static final String USER = "root"; // Nhập tên user truy cập database
-    private static final String PASSWORD = "Thang0366"; // Nhập mật khẩu truy cập database
+    private static final String USER = ""; // Nhập tên user truy cập database
+    private static final String PASSWORD = ""; // Nhập mật khẩu truy cập database
 
     public EmployeeDAO() {
         try {
