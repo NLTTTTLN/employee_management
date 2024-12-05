@@ -761,9 +761,11 @@ p{
 }
 
 .recent-activities li {
+	padding-left:10px;
     margin: 5px 0;
     font-family: Poppins, sans-serif;
 	font-weight: 400;
+	border-bottom: 1px solid #f0f0f0;
 }
 /* Add this to your style.css file */
 
