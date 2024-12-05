@@ -77,7 +77,7 @@ public class ManagerService {
     public boolean handleApproval(Integer itemId, String itemType, String action) {
         try {
             // Determine the status based on action
-            String status = "Approve".equalsIgnoreCase(action) ? "Approved" : "Rejected";
+            String status = "Chấp thuận".equalsIgnoreCase(action) ? "Chấp thuận" : "Từ chối";
             
             // Pass the status to DAO layer
             return managerDAO.handleApproval(itemId, itemType, status);
