@@ -21,7 +21,7 @@ body {
 /* Sidebar styling */
 .sidebar {
 	font-family: Poppins, sans-serif;
-    width: 250px;
+    width: 300px;
     background-color: white; /* Red color */
     color: #d32f2f;
     display: flex;
@@ -138,6 +138,7 @@ p{
     flex-grow: 1;
     background-color: #f4f4f4;
     padding: 20px;
+    width:80%;
 }
 
 .toggle-btn {
@@ -286,6 +287,7 @@ p{
 .dashboard .scrollable-table {
     max-height: 300px; /* Set the maximum height for scroll */
     overflow-y: auto; /* Enable vertical scrollbar */
+    min-height:300px;
     
     
 }
@@ -824,6 +826,7 @@ p{
 .management .scrollable-table {
     max-height: 300px; /* Set the maximum height for scroll */
     overflow-y: auto; /* Enable vertical scrollbar */
+    min-height:300px;
     
     
 }
@@ -1011,6 +1014,7 @@ p{
 		.manager_management .scrollable-table {
 		    max-height: 600px; /* Set the maximum height for scroll */
 		    overflow-y: auto; /* Enable vertical scrollbar */
+		    min-height:600px;
 		    
 		    
 		}
@@ -1443,5 +1447,16 @@ p{
 .changePassword .input-form button:hover {
     background-color: #b71c1c;
 		
+}
+.searchbox {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 50%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  border-radius:4px;
 }
 
