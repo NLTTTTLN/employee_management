@@ -17,8 +17,8 @@ import employee_management.bean.Employee;
 @Repository
 public class AccountDAO {
     private static final String URL = "jdbc:mysql://localhost:3306/employee_management"; // Nhập tên Schema database
-    private static final String USER = "root"; // Nhập tên user truy cập database
-    private static final String PASSWORD = "Thang0366"; // Nhập mật khẩu truy cập database
+    private static final String USER = ""; // Nhập tên user truy cập database
+    private static final String PASSWORD = ""; // Nhập mật khẩu truy cập database
 
     public AccountDAO() {
         try {
