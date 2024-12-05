@@ -36,14 +36,14 @@
                     <div class="dashboard-header">
                     	<h3>Thống kê</h3>
                         <div class="employee-count">
-                            <h3>Số lượng nhân viên: <span id="employee-count">120</span></h3>  <!-- Placeholder for dynamic employee count -->
+                            <h3>Số lượng nhân viên: <span id="employee-count"></span></h3>  <!-- Placeholder for dynamic employee count -->
                         </div>
                         <div class="top-right">
                         	<div class="pending-report">
-                                <h3>Báo cáo chờ duyệt: <span id="pending-report-count">3</span></h3>
+                                <h3>Báo cáo chờ duyệt: <span id="pending-report-count"></span></h3>
                             </div>
                             <div class="pending-absence">
-                                <h3>Đơn xin nghỉ chờ duyệt: <span id="pending-absence-count">5</span></h3>
+                                <h3>Đơn xin nghỉ chờ duyệt: <span id="pending-absence-count"></span></h3>
                             </div>
                             
                         </div>
@@ -54,6 +54,30 @@
 	                    
 	                    <div class="table-box">
 	                    	<h3>Danh sách chờ duyệt</h3>
+	                    	<input type="text" class="searchbox" id="myInput1" onkeyup="myFunction1()" placeholder="Search for titles..." title="Type in a name">
+				             <script>
+									function myFunction1() {
+									  // Declare variables
+									  var input, filter, table, tr, td, i, txtValue;
+									  input = document.getElementById("myInput1");
+									  filter = input.value.toUpperCase();
+									  table = document.getElementById("pending-table");
+									  tr = table.getElementsByTagName("tr");
+									
+									  // Loop through all table rows, and hide those who don't match the search query
+									  for (i = 0; i < tr.length; i++) {
+									    td = tr[i].getElementsByTagName("td")[1];
+									    if (td) {
+									      txtValue = td.textContent || td.innerText;
+									      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+									        tr[i].style.display = "";
+									      } else {
+									        tr[i].style.display = "none";
+									      }
+									    }
+									  }
+									}
+						</script>
 	                    	<div class="scrollable-table">
 	                    	
 	                        <table id="pending-table">
