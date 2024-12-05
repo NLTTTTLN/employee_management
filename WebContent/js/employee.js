@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (submissions && submissions.length > 0) {
                     populateTable(submissions);
                 } else {
-                    console.log('No submissions found.');
+                    console.log('Không tìm thấy đơn.');
                 }
             })
             .catch(error => {
-                console.error('Error fetching submissions:', error);
+                console.error('Lỗi khi đồng bộ đơn:', error);
             });
     }
 
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		    fetch(apiUrl)
 		        .then(response => {
 		            if (!response.ok) {
-		                throw new Error('Network response was not ok');
+		                throw new Error('Phản hồi mạng không tốt.');
 		            }
 		            return response.json(); // Parse the JSON if successful
 		        })
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		            // Show the modal
 		            document.getElementById('submit-detail-modal').style.display = 'block';
 		        })
-		        .catch(error => console.error('Error fetching submit item details:', error));
+		        .catch(error => console.error('Lỗi khi đồng bộ chi tiết đơn:', error));
 		}
 		// Function to close the modal
 	
@@ -167,22 +167,22 @@ document.addEventListener('DOMContentLoaded', function() {
 				       const itemType = document.getElementById('submit-detail-modal').getAttribute('data-item-type');
 				       
 				       // Confirm deletion with the user
-				       if (confirm(`Are you sure you want to delete this ${itemType} with ID: ${itemId}?`)) {
+				       if (confirm(`Bạn có chắc chắn muốn xóa ${itemType} ID: ${itemId} này không?`)) {
 				           // Make a DELETE request to the backend to delete the item
 				           fetch(`/employee_management/employee/delete-submit?itemId=${encodeURIComponent(itemId)}&itemType=${encodeURIComponent(itemType)}`, {
 				               method: 'POST',
 				           })
 				           .then(response => {
 				               if (!response.ok) {
-				                   throw new Error('Failed to delete submission');
+				                   throw new Error('Xóa đơn thất bại.');
 				               }
 				               return response.json();
 				           })
 				           .then(data => {
 				               // Check if the deletion was successful
 				               if (data.success) {
-				                   console.log(`Successfully deleted ${itemType} with ID: ${itemId}`);
-								   alert(`Successfully deleted ${itemType} with ID: ${itemId}`);
+				                   console.log(`Xóa đơn ${itemType} ID: ${itemId} thành công`);
+								   alert(`Xóa đơn ${itemType} ID: ${itemId} thành công`);
 				                   // Remove the item from the table (UI update)
 				                   const row = document.querySelector(`tr[data-id="${itemId}"]`);
 				                   if (row) {
@@ -193,11 +193,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				                   closeSubmitDetailModal();
 								   location.reload();
 				               } else {
-				                   console.error('Failed to delete the submission: ' + data.message);
+				                   console.error('Xóa đơn thất bại: ' + data.message);
 				               }
 				           })
 				           .catch(error => {
-				               console.error('Error deleting submission:', error);
+				               console.error('Lỗi khi xóa đơn:', error);
 				           });
 				       }
 				   }
