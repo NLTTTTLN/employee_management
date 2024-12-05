@@ -32,12 +32,12 @@ public class AccountService {
 
     public List<String> getRecentManagerActivities() {
         // Your logic to get recent activities by managers
-        return List.of("Manager 1 logged in", "Manager 2 created a report"); // Placeholder
+        return accountDAO.getRecentManagerActivities(); // Placeholder
     }
 
     public List<String> getRecentEmployeeActivities() {
         // Your logic to get recent activities by employees
-        return List.of("Employee 1 submitted a request", "Employee 2 updated their profile"); // Placeholder
+    	return accountDAO.getRecentEmployeeActivities();  // Placeholder
     }
     
     // Fetch all managers
