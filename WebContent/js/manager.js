@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	            // Show the modal
 	            document.getElementById('submit-detail-modal').style.display = 'block';
 	        })
-	        .catch(error => console.error('Error fetching submit item details:', error));
+	        .catch(error => console.error('Lỗi đồng bộ dữ liệu báo cáo/đơn:', error));
 	}
 
 
@@ -144,12 +144,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	if (approveSubmitBtn) {
 		       approveSubmitBtn.onclick = function() {
-		           handleApproval('Approve');
+		           handleApproval('Chấp thuận');
 		       };
 		   }
 	if (rejectSubmitBtn) {
 		   		rejectSubmitBtn.onclick = function() {
-		   		   handleApproval('Reject');
+		   		   handleApproval('Từ chối ');
 		   		};
 		   }
 	// Function to close the modal
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	       const itemType = document.getElementById('submit-detail-modal').getAttribute('data-item-type');
 
 	       if (!itemId || !itemType) {
-	           console.error('Error: itemId or itemType is missing.');
+	           console.error('Error: ID và loại đơn còn thiếu.');
 	           return;
 	       }
 
@@ -187,14 +187,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	       .then(response => response.json())
 	       .then(data => {
 	           if (data.success) {
-	               alert(`Item ${action.toLowerCase()} successfully.`);
+	               alert(`Đơn đã ${action.toLowerCase()} thành công.`);
 	               closeSubmitDetailModal(); // Close modal after action
 	               location.reload(); // Refresh the page to show updated status
 	           } else {
 	               alert('Error: ' + data.message);
 	           }
 	       })
-	       .catch(error => console.error('Error handling approval/rejection:', error));
+	       .catch(error => console.error('Lỗi khi chấp thuận/từ chối:', error));
 	   }
 
 
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 populateTable('employees', data.employeeData);
                 populateEmployeeUsername(data.employeeData);
             })
-            .catch(error => console.error('Error fetching user data:', error));
+            .catch(error => console.error('Lỗi khi đồng bộ danh sách nhân viên:', error));
     }
     fetchEmployee();
 
@@ -296,13 +296,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (emailRegex.test(email)) {
                         addEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
                     } else {
-                        alert("Please enter a valid email.");
+                        alert("Vui lòng nhập đúng địa chỉ email.");
                     }
                 } else {
-                    alert('Please enter a valid phone number.');
+                    alert('Vui lòng nhập đúng số điện thoại.');
                 }
             } else {
-                alert('Please fill out all fields.');
+                alert('Vui lòng điền đầy đủ thông tin.');
             }
         };
     }
@@ -318,19 +318,19 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => {
             if (!response.ok) {
                 return response.text().then(errorMessage => {
-                    throw new Error(`Failed to add user: ${errorMessage}`);
+                    throw new Error(`Lỗi khi thêm nhân viên: ${errorMessage}`);
                 });
             }
             return response.text();
         })
         .then(() => {
-            alert(`User ${username} added successfully.`);
+            alert(`Nhân viên ${username} được thêm thành công.`);
             fetchEmployee(); // Refresh employee data
             closeAddModal(); // Close the Add Modal
         })
         .catch(error => {
-            console.error('Error adding user:', error);
-            alert(`Error: ${error.message}`);
+            console.error('Lỗi khi thêm nhân viên:', error);
+            alert(`Lỗi: ${error.message}`);
         });
     }
 
@@ -399,13 +399,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 deleteUser(username);
                 closeDeleteModal();
             } else {
-                alert('No user selected for deletion.');
+                alert('Không có nhân viên nào được chọn để xóa.');
             }
         };
     }
 
     function deleteUser(username) {
-        if (confirm(`Are you sure you want to delete user ${username}?`)) {
+        if (confirm(`Bạn chắc chắn muốn xóa nhân viên ${username}?`)) {
             fetch('/employee_management/manager/delete', {
                 method: 'POST',
                 headers: {
@@ -415,15 +415,15 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to delete user');
+                    throw new Error('Không thể xóa nhân viên');
                 }
                 return response.text();
             })
             .then(() => {
-                alert(`User ${username} deleted successfully.`);
+                alert(`Nhân viên ${username} đã được xóa thành công.`);
                 fetchEmployee(); // Refresh employee data
             })
-            .catch(error => console.error('Error deleting user:', error));
+            .catch(error => console.error('Lỗi khi xóa nhân viên:', error));
         }
     }
 
@@ -496,12 +496,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	                    document.getElementById('editDepartment').value = data.department;
 	                    document.getElementById('editSalary').value = data.salary;
 	                } else {
-	                    alert('Employee data not found.');
+	                    alert('Không tìm thấy nhân viên.');
 	                }
 	            })
 	            .catch(error => {
 	                console.error('Error fetching employee data:', error);
-	                alert('Error fetching employee data');
+	                alert('Lỗi khi đồng bộ thÔng tin nhân viên.');
 	            });
 	    }
 	}
@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	            selectedEditEmployee = { username: selectEditUsername };
 	            openEditModal();
 	        } else {
-	            alert('Please select an employee.');
+	            alert('Xin hãy chọn nhân viên.');
 	        }
 	    };
 	}
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (username && name && gender && dob && email && phone_num && address && department && salary) {
                 editEmployee(username, name, gender, dob, email, phone_num, address, department, salary);
             } else {
-                alert('Please fill out all fields.');
+                alert('Vui lòng điền đầy đủ thông tin.');
             }
         };
     }
@@ -575,19 +575,21 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => {
             if (!response.ok) {
                 return response.text().then(errorMessage => {
-                    throw new Error(`Failed to edit user: ${errorMessage}`);
+                    throw new Error(`Lỗi khi cập nhật thông tin nhân viên: ${errorMessage}`);
                 });
             }
             return response.text();
         })
         .then(() => {
-            alert(`User ${username} edited successfully.`);
+            alert(`Nhân viên ${username} được cập nhật thành công.`);
             fetchEmployee(); // Refresh employee data
+
             closeEditModal(); // Close the Edit Modal
+			closeEditSelectModal();
         })
         .catch(error => {
             console.error('Error editing user:', error);
-            alert(`Error: ${error.message}`);
+            alert(`Lỗi: ${error.message}`);
         });
     }
 	
@@ -697,7 +699,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					formData.append('username', employeeUsername);
 
 			        // Use fetch to send the data to the backend
-			        fetch('/employee_management/employee/change-password', {
+			        fetch('/employee_management/manager/change-password', {
 			            method: 'POST',
 			            body: formData
 			        })
@@ -725,7 +727,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		               event.preventDefault(); // Prevent the default form submission behavior
 		               
 		               // Collect form data
-		               const employeeId = document.getElementById('employeeId').value;
 		               const username = document.getElementById('username').value;
 		               const name = document.getElementById('name').value;
 		               const gender = document.getElementById('gender').value;
@@ -736,7 +737,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		               // Prepare data to be sent to the server
 		               const formData = new FormData();
-		               formData.append('employeeId', employeeId);
 		               formData.append('username', username);
 		               formData.append('name', name);
 		               formData.append('gender', gender);
@@ -746,7 +746,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		               formData.append('address', address);
 
 		               // Send data via fetch to the backend (Assume the URL is '/employee_management/employee/update')
-		               fetch('/employee_management/employee/update', {
+		               fetch('/employee_management/manager/update', {
 		                   method: 'POST',
 		                   body: formData,
 		               })
