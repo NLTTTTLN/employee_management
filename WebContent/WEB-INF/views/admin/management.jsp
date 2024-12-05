@@ -44,8 +44,33 @@
                     <div class="table-container">
                         <div class="table-box">
                             <h3>Danh sách quản lý</h3>
+                            <input type="text" class="searchbox" id="myInput1" onkeyup="myFunction1()" placeholder="Search for names.." title="Type in a name">
+				             <script>
+									function myFunction1() {
+									  // Declare variables
+									  var input, filter, table, tr, td, i, txtValue;
+									  input = document.getElementById("myInput1");
+									  filter = input.value.toUpperCase();
+									  table = document.getElementById("myTable1");
+									  tr = table.getElementsByTagName("tr");
+									
+									  // Loop through all table rows, and hide those who don't match the search query
+									  for (i = 0; i < tr.length; i++) {
+									    td = tr[i].getElementsByTagName("td")[0];
+									    if (td) {
+									      txtValue = td.textContent || td.innerText;
+									      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+									        tr[i].style.display = "";
+									      } else {
+									        tr[i].style.display = "none";
+									      }
+									    }
+									  }
+									}
+						</script>
                             <div class="scrollable-table">
-                                <table class="managers-table" border="1">
+                            
+                                <table class="managers-table" border="1" id="myTable1">
                                     <thead>
                                     <tr>
                                         <th>Tên tài khoản</th>
@@ -66,8 +91,33 @@
 
                         <div class="table-box">
                             <h3>Danh sách nhân viên</h3>
+                             <input type="text" class="searchbox" id="myInput2" onkeyup="myFunction2()" placeholder="Search for names.." title="Type in a name">
+                             <script>
+										function myFunction2() {
+										  // Declare variables
+										  var input, filter, table, tr, td, i, txtValue;
+										  input = document.getElementById("myInput2");
+										  filter = input.value.toUpperCase();
+										  table = document.getElementById("myTable2");
+										  tr = table.getElementsByTagName("tr");
+										
+										  // Loop through all table rows, and hide those who don't match the search query
+										  for (i = 0; i < tr.length; i++) {
+										    td = tr[i].getElementsByTagName("td")[0];
+										    if (td) {
+										      txtValue = td.textContent || td.innerText;
+										      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+										        tr[i].style.display = "";
+										      } else {
+										        tr[i].style.display = "none";
+										      }
+										    }
+										  }
+										}
+							</script>
                             <div class="scrollable-table">
-                                <table class="employees-table" border="1">
+                           
+                                <table class="employees-table" border="1" id="myTable2">
                                     <thead>
                                     <tr>
                                         <th>Tên tài khoản</th>
@@ -130,6 +180,7 @@
             </div>
         </div>
     </div>
+		    
 
     <script src="<c:url value='/js/admin.js'/>"></script> <!-- Reusable JS file -->
 </body>
