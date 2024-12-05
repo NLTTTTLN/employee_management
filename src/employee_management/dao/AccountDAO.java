@@ -86,6 +86,45 @@ public class AccountDAO {
         }
         return 0;
     }
+    
+    public List<String> getRecentManagerActivities() {
+        List<String> activities = new ArrayList<>();
+        String query = "SELECT activityType, description, timestamp FROM ActivityLog WHERE userType = 'manager' ORDER BY timestamp DESC LIMIT 10";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                String activity = rs.getString("activityType") + ": " + rs.getString("description") + " at " + rs.getTimestamp("timestamp");
+                activities.add(activity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions
+        }
+        
+        return activities;
+    }
+
+    public List<String> getRecentEmployeeActivities() {
+        List<String> activities = new ArrayList<>();
+        String query = "SELECT activityType, description, timestamp FROM ActivityLog WHERE userType = 'employee' ORDER BY timestamp DESC LIMIT 10";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                String activity = rs.getString("activityType") + ": " + rs.getString("description") + " at " + rs.getTimestamp("timestamp");
+                activities.add(activity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions
+        }
+        
+        return activities;
+    }
+
     // Fetch all managers
     public List<Account> getAllManagers() {
         String sql = "SELECT * FROM account WHERE role = 'manager'";
@@ -136,14 +175,13 @@ public class AccountDAO {
             // Depending on the role, insert the user into the respective table
             if ("manager".equals(role)) {
                 // Insert into 'manager' table
-                insertRoleSql = "INSERT INTO manager (username, name, gender, dob, email, department) VALUES (?,?,?,?,?,?)";
+                insertRoleSql = "INSERT INTO manager (username, name, gender, dob, email) VALUES (?,?,?,?,?)";
                 try (PreparedStatement stmtManager = conn.prepareStatement(insertRoleSql)) {
                 	stmtManager.setString(1, username);
                 	stmtManager.setString(2, "Welcome");
-                	stmtManager.setString(3, "Male");
+                	stmtManager.setString(3, "Nam");
                 	stmtManager.setDate(4, Date.valueOf("1990-05-15")); 
                 	stmtManager.setString(5, "welcome@welcome.welcome");
-                	stmtManager.setString(6, "Welcome");
                     stmtManager.executeUpdate();
                     System.out.println("Added manager with username: " + username);
                 }
@@ -153,7 +191,7 @@ public class AccountDAO {
                 try (PreparedStatement stmtEmployee = conn.prepareStatement(insertRoleSql)) {
                     stmtEmployee.setString(1, username);
                     stmtEmployee.setString(2, "Welcome");
-                    stmtEmployee.setString(3, "Male");
+                    stmtEmployee.setString(3, "Nam");
                     stmtEmployee.setDate(4, Date.valueOf("1990-05-15")); 
                     stmtEmployee.setString(5, "welcome@welcome.welcome");
                     stmtEmployee.setString(6, "Welcome");
@@ -183,17 +221,43 @@ public class AccountDAO {
         }
     }
 
-    // Promote an employee to a manager
     public void promoteToManager(String username) {
-        String sql = "UPDATE account SET role = 'manager' WHERE username = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            stmt.executeUpdate();
+        String updateAccountSql = "UPDATE account SET role = 'manager' WHERE username = ?";
+        String insertManagerSql = "INSERT INTO manager (username, name, gender, dob, email, phone_num, address) " +
+                                   "SELECT username, name, gender, dob, email, phone_num, address FROM employee WHERE username = ?";
+
+        try (Connection conn = getConnection()) {
+            // Start a transaction
+            conn.setAutoCommit(false);
+
+            // Update the account role to 'manager'
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateAccountSql)) {
+                updateStmt.setString(1, username);
+                updateStmt.executeUpdate();
+            }
+
+            // Insert the employee's details into the manager table
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertManagerSql)) {
+                insertStmt.setString(1, username);
+                insertStmt.executeUpdate();
+            }
+
+            // Commit the transaction
+            conn.commit();
+            System.out.println("Successfully promoted employee with username '" + username + "' to manager.");
+
         } catch (Exception e) {
             e.printStackTrace();
+
+            // Rollback transaction on error
+            try (Connection conn = getConnection()) {
+                conn.rollback();
+            } catch (Exception rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
         }
     }
+
     public Integer getAccountId(String username) {
         String roleSql = "SELECT role FROM account WHERE username = ?";
         String idSql = null;
