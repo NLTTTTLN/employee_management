@@ -34,6 +34,24 @@ public class EmployeeDAO {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
     
+    public void logActivity(String username, String userType, String activityType, String description) {
+        String sql = "INSERT INTO ActivityLog (username, userType, activityType, description) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, userType);
+            stmt.setString(3, activityType);
+            stmt.setString(4, description);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     public Employee getEmployeeById(Integer id) {
         String sql = "SELECT e.employee_id, e.username, e.name, e.gender, e.dob, e.email, e.phone_num, e.address, e.department, e.salary " +
                      "FROM employee e " +
@@ -187,6 +205,7 @@ public class EmployeeDAO {
     public boolean deleteSubmit(Integer itemId, String itemType) {
         // Initialize SQL query variable
         String sql = "";
+        String username = null;
 
         // Set the SQL query based on the itemType (either "Report" or "Absence Request")
         if ("Report".equalsIgnoreCase(itemType)) {
@@ -198,7 +217,34 @@ public class EmployeeDAO {
             return false;
         }
 
-        // Execute the SQL query
+        // First, get the username of the employee who submitted the item
+        try (Connection conn = getConnection()) {
+            // Fetch employee's username based on the item ID
+            String usernameQuery = "SELECT e.username FROM employee e " +
+                                   "JOIN Reports r ON r.employee_id = e.employee_id " + 
+                                   "WHERE r.id = ? LIMIT 1";  // Or adjust the query for AbsenceRequests if needed
+
+            // For Absence Requests, use a different query
+            if ("Absence Request".equalsIgnoreCase(itemType)) {
+                usernameQuery = "SELECT e.username FROM employee e " +
+                                "JOIN AbsenceRequests ar ON ar.employee_id = e.employee_id " +
+                                "WHERE ar.id = ? LIMIT 1";
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(usernameQuery)) {
+                stmt.setInt(1, itemId);  // Set the item ID to fetch the username
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        username = rs.getString("username");
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Now execute the deletion and log the activity
         try (Connection conn = getConnection();  // Get database connection
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -209,6 +255,10 @@ public class EmployeeDAO {
             int rowsAffected = stmt.executeUpdate();
 
             // If one row was affected, deletion was successful
+            if (rowsAffected > 0 && username != null) {
+                logActivity(username, "employee", "Delete " + itemType, itemType + " với ID " + itemId + " đã bị xóa.");
+            }
+
             return rowsAffected > 0;
 
         } catch (SQLException e) {
@@ -216,12 +266,14 @@ public class EmployeeDAO {
             return false;  // Return false if any error occurs
         }
     }
+
     
  // Method to save submit item (either Report or Absence Request)
     public boolean saveSubmitItem(EmployeeSubmitItem item) {
         // Check the type of the item and insert into the correct table
         String sql = "";
-        
+        String username = null;
+
         if ("Report".equalsIgnoreCase(item.getType())) {
             sql = "INSERT INTO Reports (title, description, employee_id, file_path) VALUES (?, ?, ?, ?)";
         } else if ("Absence Request".equalsIgnoreCase(item.getType())) {
@@ -231,10 +283,30 @@ public class EmployeeDAO {
             return false;
         }
 
+        // First, get the username of the employee who is submitting the item
+        try (Connection conn = getConnection()) {
+            // Fetch employee's username based on the employee_id
+            String usernameQuery = "SELECT e.username FROM employee e " +
+                                   "WHERE e.employee_id = ? LIMIT 1";  // Fetch username for both Reports and Absence Requests
+
+            try (PreparedStatement stmt = conn.prepareStatement(usernameQuery)) {
+                stmt.setInt(1, item.getEmployeeId());  // Set the employee_id to fetch the username
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        username = rs.getString("username");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Insert data into the appropriate table
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-        	System.out.println("Start storing item:" + item);
+
+            System.out.println("Start storing item:" + item);
+
             // Set the parameters
             stmt.setString(1, item.getTitle());
             stmt.setString(2, item.getDescription());
@@ -243,12 +315,17 @@ public class EmployeeDAO {
             // If it's a Report, add the file_path
             if ("Report".equalsIgnoreCase(item.getType())) {
                 stmt.setString(4, item.getFilePath());  // Set file path for Report
-            } 
+            }
 
             // Execute the query
             int rowsAffected = stmt.executeUpdate();
 
             // If rows are affected, insertion is successful
+            if (rowsAffected > 0 && username != null) {
+                logActivity(username, "employee", "Create " + item.getType(), 
+                            item.getType() + " với tiêu đề '" + item.getTitle() + "' đã được tạo.");
+            }
+
             return rowsAffected > 0;
 
         } catch (SQLException e) {
@@ -256,6 +333,7 @@ public class EmployeeDAO {
             return false;
         }
     }
+
     
     public boolean updateEmployee(String username, String name, String gender, java.sql.Date dob, String email, String phone_num, String address) {
         String sql = "UPDATE employee SET name = ?, gender = ?, dob = ?, email = ?, phone_num = ?, address = ? WHERE username = ?";
@@ -273,7 +351,12 @@ public class EmployeeDAO {
             stmt.setString(7, username); // Ensure username is the last parameter (where the condition is)
 
             int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0; // If at least one row was updated, return true
+         // Log the activity
+            if (rowsUpdated > 0) {
+                logActivity(username, "employee", "Update Profile", "Nhân viên " + username + "cập nhật thông tin cá nhân.");
+            }
+
+            return rowsUpdated > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -282,8 +365,28 @@ public class EmployeeDAO {
     }
     
     public boolean changeEmployeePassword(String username, String oldPassword, String newPassword) {
-    	String sql = "UPDATE account SET password = ? WHERE username = ? AND password = ?";
-    	System.out.println("Start checking for username:" + username +", old password:" + oldPassword + ", newPassword: " + newPassword);
+        String sql = "UPDATE account SET password = ? WHERE username = ? AND password = ?";
+        String employeeName = null;
+
+        System.out.println("Start checking for username: " + username + ", old password: " + oldPassword + ", newPassword: " + newPassword);
+
+        try (Connection conn = getConnection()) {
+            // Fetch employee's name based on the username (to include it in the log)
+            String usernameQuery = "SELECT name FROM employee WHERE username = ? LIMIT 1";  // Fetch employee name
+
+            try (PreparedStatement stmt = conn.prepareStatement(usernameQuery)) {
+                stmt.setString(1, username);  // Set the username to fetch the employee name
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        employeeName = rs.getString("name");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Update password in the account table
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -293,6 +396,12 @@ public class EmployeeDAO {
             stmt.setString(3, oldPassword); // Ensure username is the last parameter (where the condition is)
 
             int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0 && employeeName != null) {
+                // Log the password change activity
+                logActivity(username, "employee", "Change password", 
+                            "Mật khẩu của nhân viên " + employeeName + " (" + username + ") đã được thay đổi.");
+            }
+
             return rowsUpdated > 0; // If at least one row was updated, return true
 
         } catch (SQLException e) {
@@ -300,4 +409,5 @@ public class EmployeeDAO {
             return false; // If an error occurred, return false
         }
     }
+
 }
