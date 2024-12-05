@@ -19,8 +19,8 @@ import employee_management.bean.Manager;
 @Repository
 public class ManagerDAO {
     private static final String URL = "jdbc:mysql://localhost:3306/employee_management"; // Schema database
-    private static final String USER = "root"; // User for database access
-    private static final String PASSWORD = "Thang0366"; // Password for database access
+    private static final String USER = ""; // User for database access
+    private static final String PASSWORD = ""; // Password for database access
 
     public ManagerDAO() {
         try {
