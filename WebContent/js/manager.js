@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.querySelector('.toggle-btn');
     const modal = document.getElementById('actionModal');
     const addModal = document.getElementById('addModal');
-    const employeeListEdit = document.getElementById('employeeListEdit');
     const confirmButton = document.getElementById('confirmActionBtn');
     const modalTitle = document.querySelector('#actionModal h3');
     const closeBtn = document.getElementById('closeBtn');
@@ -508,7 +507,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// Event listener for dropdown change
-	document.getElementById('employeeListEdit').addEventListener('change', selectEditEmployee);
+	const employeeListEdit = document.getElementById('employeeListEdit');
+	if (employeeListEdit) {
+			     employeeListEdit.addEventListener('change', selectEditEmployee);
+			    
+			 }
 
 	// Confirm button action (this should open the edit modal)
 	if (confirmSelectBtn) {
@@ -528,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
             editModal.style.display = 'block';
         }
     }
-
+	const closeEditBtn = document.getElementById('closeEditBtn');
     if (closeEditBtn) {
         closeEditBtn.onclick = function() {
             closeEditSelectModal();
@@ -587,4 +590,179 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(`Error: ${error.message}`);
         });
     }
+	
+	
+	
+	
+	
+	const profileBtn = document.getElementById("profileBtn");
+	const changePasswordBtn = document.getElementById("changePasswordBtn");
+	const profileDiv = document.querySelector('.profile'); // Div for personal info
+	const changePasswordDiv = document.querySelector('.changePassword'); // Div for password change
+	const submitProfileBtn = document.getElementById('submitProfileBtn');
+	const submitChangePwdBtn = document.getElementById('submitChangePwdBtn');
+	
+	// Toggle visibility between profile and change password
+		if (profileBtn) {
+		     profileBtn.addEventListener('click', function() {
+		         console.log("Profile button clicked!");
+		         showPersonalInfo();
+		     });
+		 }
+
+		 if (changePasswordBtn) {
+		     changePasswordBtn.addEventListener('click', function() {
+		         console.log("Change Password button clicked!");
+		         showChangePassword();
+		     });
+		 }
+		 if (profileDiv) showPersonalInfo();
+	
+
+	    // Function to show the personal info form and hide the change password form
+	    function showPersonalInfo() {
+			console.log("1");
+	        if (profileDiv) {
+	            profileDiv.style.display = 'block';
+	        }
+	        if (changePasswordDiv) {
+	            changePasswordDiv.style.display = 'none';
+	        }
+	    }
+
+	    // Function to show the change password form and hide the personal info form
+	    function showChangePassword() {
+	        if (profileDiv) {
+	            profileDiv.style.display = 'none';
+	        }
+	        if (changePasswordDiv) {
+	            changePasswordDiv.style.display = 'block';
+	        }
+	    }
+		
+		   
+		   // Function to validate change password form
+		   function validatePasswordForm() {
+		       
+
+		       if (!oldPass || !newPass || !confirmPass) {
+		           alert('Vui lòng điền đầy đủ thông tin');
+		           return false;
+		       }
+
+		       if (newPass !== confirmPass) {
+		           alert('Mật khẩu mới và xác nhận mật khẩu không khớp');
+		           return false;
+		       }
+
+		       return true;
+		   }
+		   
+		   // Add event listener to the submit button of the change password form
+		   
+		   if (submitChangePwdBtn) {
+			submitChangePwdBtn.addEventListener('click', function(event) {
+			        event.preventDefault(); // Prevent the default form submission
+					const oldPass = document.getElementById('oldPass').value;
+						   const newPass = document.getElementById('newPass').value;
+						   const confirmPass = document.getElementById('confirmPass').value;
+						   const employeeUsername = document.getElementById('username').value;
+			        const oldPassword = oldPass;
+			        const newPassword = newPass;
+			        const confirmPassword = confirmPass;
+
+			        // Basic validation checks
+			        if (!oldPassword || !newPassword || !confirmPassword) {
+			            alert('Vui lòng điền đủ thông tin.');
+						console.log(oldPassword);
+						console.log(newPassword);
+						console.log(confirmPassword);
+			            return;
+			        }
+
+			        if (newPassword !== confirmPassword) {
+			            alert('Mật khẩu mới và mật khẩu xác nhận không khớp.');
+			            return;
+			        }
+
+			        if (newPassword.length < 6) {
+			            alert('Mật khẩu mới phải có ít nhất 6 ký tự.');
+			            return;
+			        }
+
+			        // Send the password change data to the server
+			        const formData = new FormData();
+			        formData.append('oldPassword', oldPassword);
+			        formData.append('newPassword', newPassword);
+					formData.append('username', employeeUsername);
+
+			        // Use fetch to send the data to the backend
+			        fetch('/employee_management/employee/change-password', {
+			            method: 'POST',
+			            body: formData
+			        })
+			        .then(response => response.json())
+			        .then(data => {
+			            if (data.success) {
+			                alert('Mật khẩu đã được cập nhật thành công.');
+			                // Reset form fields after successful change
+							document.getElementById('oldPass').value = '';
+							document.getElementById('newPass').value = '';
+							document.getElementById('confirmPass').value = '';
+			            } else {
+			                alert('Có lỗi khi đổi mật khẩu. Vui lòng thử lại.');
+			            }
+			        })
+			        .catch(error => {
+			            console.error('Error:', error);
+			            alert('Có lỗi khi kết nối với máy chủ.');
+			        });
+			    });
+		   }
+		  
+		   if (submitProfileBtn) {
+		           submitProfileBtn.addEventListener('click', function (event) {
+		               event.preventDefault(); // Prevent the default form submission behavior
+		               
+		               // Collect form data
+		               const employeeId = document.getElementById('employeeId').value;
+		               const username = document.getElementById('username').value;
+		               const name = document.getElementById('name').value;
+		               const gender = document.getElementById('gender').value;
+		               const dob = document.getElementById('dob').value;
+		               const email = document.getElementById('email').value;
+		               const phone_num = document.getElementById('phone_num').value;
+		               const address = document.getElementById('address').value;
+
+		               // Prepare data to be sent to the server
+		               const formData = new FormData();
+		               formData.append('employeeId', employeeId);
+		               formData.append('username', username);
+		               formData.append('name', name);
+		               formData.append('gender', gender);
+		               formData.append('dob', dob);
+		               formData.append('email', email);
+		               formData.append('phone_num', phone_num);
+		               formData.append('address', address);
+
+		               // Send data via fetch to the backend (Assume the URL is '/employee_management/employee/update')
+		               fetch('/employee_management/employee/update', {
+		                   method: 'POST',
+		                   body: formData,
+		               })
+		               .then(response => response.json()) // Parse the JSON response
+		               .then(data => {
+		                   if (data.success) {
+		                       alert('Thông tin cá nhân đã được cập nhật.');
+							   location.reload();
+		                   } else {
+		                       alert('Có lỗi khi cập nhật thông tin.');
+		                   }
+		               })
+		               .catch(error => {
+		                   console.error('Error:', error);
+		                   alert('Có lỗi xảy ra. Vui lòng thử lại.');
+		               });
+		           });
+		       }
 });
