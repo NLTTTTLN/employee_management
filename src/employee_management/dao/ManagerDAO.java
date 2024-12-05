@@ -56,6 +56,23 @@ public class ManagerDAO {
         return account;
     }
     
+    public void logActivity(String username, String userType, String activityType, String description) {
+        String sql = "INSERT INTO ActivityLog (username, userType, activityType, description) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, userType);
+            stmt.setString(3, activityType);
+            stmt.setString(4, description);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
  // Method to get Manager ID by username
     public int findManagerIdByUsername(String username) {
         String sql = "SELECT manager_id FROM manager WHERE username = ?";  // Assuming role is stored in the 'account' table
@@ -80,7 +97,7 @@ public class ManagerDAO {
     }
     
     public Manager getManagerById(Integer id) {
-        String sql = "SELECT manager_id, username, name, gender, dob, email, phone_num, address, department " +
+        String sql = "SELECT manager_id, username, name, gender, dob, email, phone_num, address " +
                      "FROM manager " +
                      "WHERE manager_id = ?";
 
@@ -102,7 +119,6 @@ public class ManagerDAO {
                     manager.setEmail(rs.getString("email"));
                     manager.setphone_num(rs.getString("phone_num"));
                     manager.setAddress(rs.getString("address"));
-                    manager.setDepartment(rs.getString("department"));
 
                     return manager;  // Return the Manager object populated with data
                 }
@@ -132,7 +148,7 @@ public class ManagerDAO {
     
     // Method to get the count of pending absence requests
     public int getPendingAbsenceCount() throws SQLException {
-        String query = "SELECT COUNT(*) FROM AbsenceRequests WHERE status = 'Pending'";
+        String query = "SELECT COUNT(*) FROM AbsenceRequests WHERE status = 'Đang chờ'";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -145,7 +161,7 @@ public class ManagerDAO {
 
     // Method to get the count of pending report requests
     public int getPendingReportCount() throws SQLException {
-        String query = "SELECT COUNT(*) FROM Reports WHERE status = 'Pending'";
+        String query = "SELECT COUNT(*) FROM Reports WHERE status = 'Đang chờ'";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -162,12 +178,12 @@ public class ManagerDAO {
             SELECT id, 'Report' AS type, title, e.name AS submittedBy, created_at
             FROM Reports r
             JOIN Employee e ON r.employee_id = e.employee_id
-            WHERE r.status = 'Pending'
+            WHERE r.status = 'Đang chờ'
             UNION
             SELECT id, 'Absence Request' AS type, title, e.name AS submittedBy, created_at
             FROM AbsenceRequests ar
             JOIN Employee e ON ar.employee_id = e.employee_id
-            WHERE ar.status = 'Pending'
+            WHERE ar.status = 'Đang chờ'
             ORDER BY created_at DESC;
         """;
 
@@ -195,14 +211,26 @@ public class ManagerDAO {
     // Handle approval or rejection of an item
     public boolean handleApproval(Integer itemId, String itemType, String status) {
         String sql = "";
+        String itemTitle = null;  // To store the item title for logging purposes
+        System.out.println("Status: " + status);
+        System.out.println("ItemId: " + itemId);
+        System.out.println("ItemType: " + itemType);
+        // Determine the correct table and column for the item based on its type
         if ("Report".equalsIgnoreCase(itemType)) {
             // Update status for reports
             sql = "UPDATE Reports SET status = ? WHERE id = ?";
+            
+
+
         } else if ("Absence Request".equalsIgnoreCase(itemType)) {
             // Update status for absence requests
             sql = "UPDATE AbsenceRequests SET status = ? WHERE id = ?";
+            
         }
 
+        
+
+        // Proceed with updating the status
         try (Connection conn = getConnection(); 
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -213,6 +241,12 @@ public class ManagerDAO {
             // Execute the update
             int rowsAffected = stmt.executeUpdate();
 
+            if (rowsAffected > 0 ) {
+                // Log the approval/rejection activity
+                logActivity(" ", "manager", status + " " + itemType, 
+                            itemType + " với tiêu đề \"" + itemTitle + "\" và ID " + itemId + " đã  " + status + " bởi quản lý");
+            }
+
             // If rowsAffected > 0, the update was successful
             return rowsAffected > 0;
 
@@ -221,6 +255,7 @@ public class ManagerDAO {
             return false;
         }
     }
+
 
     
  // Fetch Report details
@@ -325,20 +360,20 @@ public class ManagerDAO {
     
     // Add a user
     public void addEmployee(String username, String password, String name, String gender, java.sql.Date dob, String email, String phone_num, String address, String department, double salary) {
-        String accountSql = "INSERT INTO account (username, password, role) VALUES (?, ?, 'employee')";
+        String accountSql = "INSERT INTO account (username, password, role) VALUES (?, ?, 'employee')"; // The new employee has role 'employee'
         String employeeSql = "INSERT INTO employee (username, name, gender, dob, email, phone_num, address, department, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
         try (Connection conn = getConnection()) {
             // Start a transaction
             conn.setAutoCommit(false);
-            
-            // Insert into account table
+
+            // Insert into account table (set role as 'employee')
             try (PreparedStatement stmt = conn.prepareStatement(accountSql)) {
                 stmt.setString(1, username);
-                stmt.setString(2, password); // Password should be passed to this method
+                stmt.setString(2, password); // Password passed to this method
                 stmt.executeUpdate();
             }
-
+            System.out.println("Gender:" + gender);
             // Insert into employee table
             try (PreparedStatement stmt = conn.prepareStatement(employeeSql)) {
                 stmt.setString(1, username);
@@ -355,6 +390,10 @@ public class ManagerDAO {
 
             // Commit transaction
             conn.commit();
+
+            // Log activity: Manager adding employee
+            logActivity(" ", "manager", "Add Employee", "Quản lý '" + "' thêm nhân viên mới với tên tài khoản: '" + username + "'.");
+
             System.out.println("Added employee and account for username: " + username);
         } catch (SQLException e) {
             // Rollback transaction on error
@@ -366,6 +405,7 @@ public class ManagerDAO {
             e.printStackTrace();
         }
     }
+
 
     // Delete a user
     public void deleteEmployee(String username) {
@@ -391,6 +431,7 @@ public class ManagerDAO {
             // Commit transaction
             conn.commit();
             System.out.println("Deleted employee and account for username: " + username);
+            logActivity(" ", "manager", "Delete Employee", "Quản lý '" + "' xóa nhân viên với tên tài khoản: '" + username + "'.");
         } catch (SQLException e) {
             // Rollback transaction on error
             try (Connection conn = getConnection()) {
@@ -446,6 +487,9 @@ public class ManagerDAO {
             stmt.setString(9, username); // Ensure username is the last parameter (where the condition is)
 
             int rowsUpdated = stmt.executeUpdate();
+            if(rowsUpdated > 0) {
+            	logActivity(" ", "manager", "Update Employee", "Quản lý '" + "' cập nhật thông tin cá nhân của nhân viên: '" + username + "'.");
+            }
             return rowsUpdated > 0; // If at least one row was updated, return true
 
         } catch (SQLException e) {
@@ -470,6 +514,12 @@ public class ManagerDAO {
             stmt.setString(7, username); // Ensure username is the last parameter (where the condition is)
 
             int rowsUpdated = stmt.executeUpdate();
+
+            // Log activity if the update is successful
+            if (rowsUpdated > 0) {
+                logActivity(username, "manager", "Update Manager", "Quản lý '" + username + "' cập nhật thông tin cá nhân '" +  "'.");
+            }
+
             return rowsUpdated > 0; // If at least one row was updated, return true
 
         } catch (SQLException e) {
@@ -477,6 +527,7 @@ public class ManagerDAO {
             return false; // If an error occurred, return false
         }
     }
+
     
     public boolean changeManagerPassword(String username, String oldPassword, String newPassword) {
     	String sql = "UPDATE account SET password = ? WHERE username = ? AND password = ?";
@@ -490,6 +541,10 @@ public class ManagerDAO {
             stmt.setString(3, oldPassword); // Ensure username is the last parameter (where the condition is)
 
             int rowsUpdated = stmt.executeUpdate();
+            
+            if (rowsUpdated > 0) {
+                logActivity(username, "manager", "Update Manager", "Quản lý '" + username + "' thay đổi mật khẩu '" +  "'.");
+            }
             return rowsUpdated > 0; // If at least one row was updated, return true
 
         } catch (SQLException e) {
